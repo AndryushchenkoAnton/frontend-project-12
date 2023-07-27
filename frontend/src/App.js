@@ -1,23 +1,57 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import React from 'react';
-import LoginForm from './routes/login';
-import ErrorPage from './errors/wrongRoute';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import React, { useState } from 'react';
+import LoginForm from './routes/login/index.js';
+import ErrorPage from './errors/wrongRoute.js';
+import AuthContext from './contexts/index.js';
+import Chat from './routes/Chat/Chat.js';
+import useAuth from './Hooks/index.js';
+
+const AuthProvider = ({ children }) => {
+  const [logStatus, setStatus] = useState(!!localStorage.getItem('Token'));
+
+  const logIn = () => {
+    setStatus(true);
+  };
+
+  const logOut = () => {
+    localStorage.removeItem('Token');
+    setStatus(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ logStatus, logIn, logOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+const ChatRoute = ({ children }) => {
+  const { logStatus } = useAuth();
+
+  return (
+    logStatus ? children : <Navigate to="/login" />
+  );
+};
 
 const App = () => {
   const route = createBrowserRouter([
     {
       path: '/',
-      element: <div>/ route</div>,
+      element: (<ChatRoute>
+        <Chat />
+                </ChatRoute>),
       errorElement: <ErrorPage />,
     },
     {
-      path: 'login',
+      path: '/login',
       element: <LoginForm />,
     },
   ]);
 
   return (
-    <RouterProvider router={route} />
+    <AuthProvider>
+      <RouterProvider router={route} />
+    </AuthProvider>
   );
 };
 

@@ -2,14 +2,28 @@ import React from 'react';
 import './Login.scss';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../../Hooks/index.js';
 
 const logInSchema = yup.object().shape({
-  username: yup.string().min(10).required('Обязательное поле'),
-  password: yup.string().min(6).required('Обязательное поле'),
+  username: yup.string().min(5).required('Обязательное поле'),
+  password: yup.string().min(5).required('Обязательное поле'),
 });
 
 const LoginForm = () => {
-  const func = true;
+  const navigate = useNavigate();
+  const { logIn } = useAuth();
+  const submitAction = async ({ username, password }) => {
+    try {
+      const response = await axios.post('/api/v1/login', { username, password });
+      localStorage.setItem('Token', response.data.token);
+      logIn();
+      navigate('/');
+    } catch (e) {
+      console.log('NetWorkError!');
+    }
+  };
 
   return (
 
@@ -37,24 +51,24 @@ const LoginForm = () => {
                       />
                     </div>
                     <Formik
-                      initialValues={{ email: '', password: '' }}
+                      initialValues={{ username: '', password: '' }}
                       validationSchema={logInSchema}
-                      onSubmit={() => {
-                        console.log('Submitted!');
-                      }}
+                      onSubmit={submitAction}
                     >
-                      {() => (
+                      {({ values, handleChange, errors }) => (
                         <Form className="col12 col-md-6 mt-3 mt-mb-0">
                           <h1 className="text-center mb-4">Войти</h1>
                           <div className="form-floating mb-3">
                             <Field
-
                               name="username"
                               placeholder="Ваш ник"
-                              className="form-control"
+                              className={errors.username ? 'form-control is-invalid' : 'form-control'}
                               id="username"
                               autoComplete="username"
-                              required=""
+                              required
+                              value={values.username}
+                              onChange={handleChange}
+
                             />
                             <label htmlFor="username">Ваш ник</label>
                           </div>
@@ -62,11 +76,13 @@ const LoginForm = () => {
                             <Field
                               name="password"
                               autoComplete="current-password"
-                              required=""
+                              required
                               placeholder="Пароль"
                               type="password"
                               id="password"
-                              className="form-control"
+                              className={errors.password ? 'form-control is-invalid' : 'form-control'}
+                              value={values.password}
+                              onChange={handleChange}
 
                             />
                             <label htmlFor="password" className="form-label">Пароль</label>

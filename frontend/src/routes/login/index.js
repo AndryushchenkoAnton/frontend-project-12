@@ -18,6 +18,7 @@ const LoginForm = () => {
     try {
       const response = await axios.post('/api/v1/login', { username, password });
       localStorage.setItem('Token', response.data.token);
+      localStorage.setItem('userName', username);
       logIn();
       navigate('/');
     } catch (e) {

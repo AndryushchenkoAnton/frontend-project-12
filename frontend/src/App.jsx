@@ -5,6 +5,8 @@ import ErrorPage from './errors/wrongRoute.js';
 import AuthContext from './contexts/index.js';
 import Chat from './routes/Chat/Chat.js';
 import useAuth from './Hooks/index.js';
+import store from "./slices/index.js";
+import { Provider } from "react-redux";
 
 const AuthProvider = ({ children }) => {
   const [logStatus, setStatus] = useState(!!localStorage.getItem('Token'));
@@ -38,8 +40,10 @@ const App = () => {
     {
       path: '/',
       element: (<ChatRoute>
-        <Chat />
-                </ChatRoute>),
+        <Provider store={store}>
+         <Chat />
+        </Provider>
+      </ChatRoute>),
       errorElement: <ErrorPage />,
     },
     {

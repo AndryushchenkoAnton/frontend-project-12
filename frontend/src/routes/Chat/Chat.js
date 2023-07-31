@@ -11,9 +11,10 @@ import { Formik, Form, Field } from 'formik';
 const Chat = () => {
   const dispatch = useDispatch();
   const Token = localStorage.getItem('Token');
-  const [currentChannelId, setNewChannelId] = useState(null);
+  const [currentChannelId, setNewChannelId] = useState(1);
   const socket = io('http://localhost:5001');
   const channels = useSelector(channelsSelectors.selectEntities);
+  const messageCount = useSelector(messagesSelectors.selectTotal);
 
   socket.on('newMessage', (payload) => {
     dispatch(messagesActions.addMessage(payload));
@@ -46,7 +47,7 @@ const Chat = () => {
     );
   });
 
-  const messageCount = useSelector(messagesSelectors.selectTotal);
+
   const messages = Object.values(useSelector(messagesSelectors.selectEntities)).map((message) => {
     const { body, username } = message;
     return (

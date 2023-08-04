@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import LoginForm from './routes/login/index.js';
 import ErrorPage from './errors/wrongRoute.js';
 import AuthContext from './contexts/index.js';
-import Chat from './routes/Chat/Chat.js';
+import Chat from './routes/Chat/Chat.jsx';
 import useAuth from './Hooks/index.js';
 import store from "./slices/index.js";
 import { Provider } from "react-redux";

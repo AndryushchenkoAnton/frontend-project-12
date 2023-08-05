@@ -6,27 +6,24 @@ import * as yup from 'yup';
 import cn from 'classnames'
 import {useNavigate} from "react-router-dom";
 import useAuth from "../../Hooks/index.js";
+import { useTranslation } from 'react-i18next';
 
 const signUpSchema = yup.object().shape({
     username: yup.string()
-        .min(3, 'От 3 до 20 символов')
-        .max(20, 'От 3 до 20 символов')
-        .required('Обязательное поле'),
+        .min(3, 'usernameLength')
+        .max(20, 'usernameLength')
+        .required('reqField'),
     password: yup.string()
-        .min(6, 'Не менее 6 символов')
-        .required('Обязательное поле'),
+        .min(6, 'passwordLength')
+        .required('reqField'),
     confirmPassword: yup.string()
-        .oneOf([yup.ref('password'), null], 'Пароли должны совпадать')
-        .required('Обязательное поле'),
+        .oneOf([yup.ref('password'), null], 'confirmPassword')
+        .required('reqField'),
 });
-
-const logoutHandler = () => {
-    localStorage.removeItem('Token');
-    localStorage.removeItem('userName');
-};
 
 const SignUp = () => {
 
+    const { t } = useTranslation();
     const navigate = useNavigate()
     const [uniq, setUniq] = useState(true);
     const {logStatus ,logIn, logOut } = useAuth();
@@ -39,7 +36,7 @@ const SignUp = () => {
                     <nav className='shadow-sm navbar navbar-expand-lg navbar-light bg-white'>
                         <div className='container'>
                             <a className='navbar-brand' href={logStatus ? '/' : '/login'}>SlackLike Chat</a>
-                            {logStatus ? <button type='button' className='btn btn-primary' onClick={() => logOut()}>Выйти</button> : null}
+                            {logStatus ? <button type='button' className='btn btn-primary' onClick={() => logOut()}>{t('logOut')}</button> : null}
                         </div>
                     </nav>
                     <div className='container-fluid h-100'>
@@ -74,7 +71,7 @@ const SignUp = () => {
                                         >
                                             {({values, handleChange, errors}) => (
                                                 <Form className='w-50'>
-                                                    <h1 className='text-center mb-4'>Регистрация</h1>
+                                                    <h1 className='text-center mb-4'>{t('registration')}</h1>
                                                     <div className='form-floating mb-3'>
                                                         <Field
                                                             placeholder='От 3 до 20 символов'
@@ -86,8 +83,10 @@ const SignUp = () => {
                                                             value={values.username}
                                                             onChange={handleChange}
                                                         />
-                                                        <label className='form-label' htmlFor='username'>Имя пользователя</label>
-                                                        <div placement='right' className='invalid-tooltip'>{errors.username}</div>
+                                                        <label className='form-label' htmlFor='username'>{t('username')}</label>
+                                                        <div
+                                                            placement='right' className='invalid-tooltip'>{ t(errors.username) }
+                                                        </div>
                                                     </div>
                                                     <div className='form-floating mb-3'>
                                                         <Field
@@ -102,8 +101,10 @@ const SignUp = () => {
                                                             value={values.password}
                                                             onChange={handleChange}
                                                         />
-                                                        <div className='invalid-tooltip'>{errors.password}</div>
-                                                        <label className='form-label' htmlFor='password'>Пароль</label>
+                                                        <div
+                                                            className='invalid-tooltip'>{t(errors.password)}
+                                                        </div>
+                                                        <label className='form-label' htmlFor='password'>{t('password')}</label>
                                                     </div>
                                                     <div className='form-floating mb-4'>
                                                         <Field
@@ -117,10 +118,10 @@ const SignUp = () => {
                                                             value={values.confirmPassword}
                                                             onChange={handleChange}
                                                         />
-                                                        <div className='invalid-tooltip'>{!uniq ? 'Такой пользователь уже существует' : errors.confirmPassword}</div>
-                                                        <label className='form-label' htmlFor='confirmPassword'>Подтвердите пароль</label>
+                                                        <div className='invalid-tooltip'>{!uniq ? t('userAlreadyExh') : t(errors.confirmPassword)}</div>
+                                                        <label className='form-label' htmlFor='confirmPassword'>{t('confirmPasswordAction')}</label>
                                                     </div>
-                                                    <button type='submit' className='w-100 btn btn-outline-primary'>Зарегистрироваться</button>
+                                                    <button type='submit' className='w-100 btn btn-outline-primary'>{t('register')}</button>
                                                 </Form>
                                             )}
                                         </Formik>
@@ -136,39 +137,5 @@ const SignUp = () => {
 
     );
 };
-
-/*
-<form className='w-50'>
-    <h1 className='text-center mb-4'>Регистрация</h1>
-    <div className='form-floating mb-3'>
-        <input placeholder='От 3 до 20 символов' name='username'
-               autoComplete='username' required='' id='username'
-               className='form-control is-invalid' value=''/>
-        <label className='form-label' htmlFor='username'>Имя
-            пользователя</label>
-        <div placement='right' className='invalid-tooltip'>Обязательное поле
-        </div>
-    </div>
-    <div className='form-floating mb-3'>
-        <input placeholder='Не менее 6 символов' name='password'
-               aria-describedby='passwordHelpBlock' required=''
-               autoComplete='new-password' type='password' id='password'
-               className='form-control' value=''/>
-        <div className='invalid-tooltip'>Обязательное поле</div>
-        <label className='form-label' htmlFor='password'>Пароль</label>
-    </div>
-    <div className='form-floating mb-4'>
-        <input placeholder='Пароли должны совпадать' name='confirmPassword'
-               required='' autoComplete='new-password' type='password'
-               id='confirmPassword' className='form-control' value=''/>
-        <div className='invalid-tooltip'></div>
-        <label className='form-label' htmlFor='confirmPassword'>Подтвердите
-            пароль</label>
-    </div>
-    <button type='submit'
-            className='w-100 btn btn-outline-primary'>Зарегистрироваться
-    </button>
-</form>
-*/
 
 export default SignUp;

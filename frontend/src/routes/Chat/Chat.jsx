@@ -11,6 +11,7 @@ import DropDownChannel from '../../Components/Dropdown/DropDown.jsx';
 import cn from 'classnames';
 import ModalRename from '../../Components/Modal/ModalRename';
 import useAuth from "../../Hooks/index.js";
+import { useTranslation } from "react-i18next";
 
 const logoutHandler = () => {
   localStorage.removeItem('Token');
@@ -23,7 +24,8 @@ const Chat = () => {
   const store = useStore();
   const socket = store.getState().socket.socket;
   const {logStatus, logOut } = useAuth();
-
+  const { t } = useTranslation();
+  const messages = useSelector(messagesSelectors.selectAll)
   //Modal
   const [showed, setShow] = useState(false);
   const show = () => setShow(true);
@@ -104,7 +106,7 @@ const Chat = () => {
   }, []);
 
   const renderedChannels = channels.map((channel) => {
-    const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', {'btn-secondary': currentChannelId === channel.id})// ? 'w-100 rounded-0 text-start btn btn-secondary' : 'w-100 rounded-0 text-start btn';
+    const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', {'btn-secondary': currentChannelId === channel.id})
     if(!channel.removable){
       return (
           <li className='nav-item w-100'>
@@ -128,7 +130,7 @@ const Chat = () => {
     );
   });
 
-  const messages = Object.values(useSelector(messagesSelectors.selectEntities))
+  const renderedMessages = Object.values(useSelector(messagesSelectors.selectEntities))
     .filter((message) => message.channelId === currentChannelId)
     .map((message) => {
       const { body, username } = message;
@@ -149,7 +151,7 @@ const Chat = () => {
     }
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open')
-    console.log(modalChId)
+    console.log(messages)
   }, [currentChannelId, showed]);
 
   return (
@@ -160,7 +162,7 @@ const Chat = () => {
           <nav className='shadow-sm navbar navbar-expand-lg navbar-light bg-white'>
             <div className='container'>
               <a className='navbar-brand' href={Token ? '/' : '/login'}>SlackLike Chat</a>
-              {logStatus ? <button type='button' className='btn btn-primary' onClick={() => logOut()}>Выйти</button> : null}
+              {logStatus ? <button type='button' className='btn btn-primary' onClick={() => logOut()}>{t('logOut')}</button> : null}
             </div>
           </nav>
           <div className='container h-100 my-4 overflow-hidden rounded shadow'>
@@ -186,14 +188,10 @@ const Chat = () => {
                     <p className='m-0'>
                       <b># general</b>
                     </p>
-                    <span className='text-muted'>
-                      {messageCount}
-                      {' '}
-                      сообщен.
-                    </span>
+                    <span className='text-muted'>{t('count_message', {count: messages.filter((m) => m.channelId === currentChannelId).length})}</span>
                   </div>
                   <div id='messages-box' className='chat-messages overflow-auto px-5 '>
-                    {messages}
+                    {renderedMessages}
                   </div>
                   <div className='mt-auto px-5 py-3'>
                     <Formik
@@ -223,7 +221,7 @@ const Chat = () => {
                               <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='20' height='20' fill='currentColor'>
                                 <path fillRule='evenodd' d='M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z' />
                               </svg>
-                              <span className='visually-hidden'>Отправить</span>
+                              <span className='visually-hidden'>{t('post')}</span>
                             </button>
                           </div>
                         </Form>

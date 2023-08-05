@@ -4,10 +4,12 @@ import {Field, Form, Formik} from 'formik';
 import cn from "classnames";
 import {selectors as channelsSelectors} from '../../slices/channelsSlice.js';
 import {useSelector} from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const ModalAdd = (props) => {
     const [valid, setValid] = useState(true);
     const [error, setError] = useState(null);
+    const { t } = useTranslation();
 
     const {show, handleClose, socket} = props;
     const firstModalDiv = cn('fade', 'modal-backdrop', {show: show});
@@ -17,11 +19,11 @@ const ModalAdd = (props) => {
     const handleSubmit = ({name}) => {
 
         if (names.includes(name)) {
-            setError('Должен быть уникальным')
+            setError(t('mustBeUniq'))
             setValid(false);
             return;
         } else if (name.length < 3 || name.length > 20) {
-            setError('От 3 до 20 символов')
+            setError(t('usernameLength'))
             setValid(false);
             return;
         }
@@ -38,7 +40,7 @@ const ModalAdd = (props) => {
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <div className="modal-title h4">Добавить канал</div>
+                            <div className="modal-title h4">{t('addChannel')}</div>
                             <button type="button" aria-label="Close" data-bs-dismiss="modal" className="btn btn-close"
                                     onClick={handleClose}></button>
                         </div>
@@ -57,13 +59,13 @@ const ModalAdd = (props) => {
                                                 value={values.name}
                                                 onChange={handleChange}
                                             />
-                                            <label className='visually-hidden' htmlFor='name'>Имя канала</label>
+                                            <label className='visually-hidden' htmlFor='name'>{t('channelName')}</label>
                                             <div className='invalid-feedback'>{error}</div>
                                             <div className="d-flex justify-content-end">
                                                 <button type="button" className="me-2 btn btn-secondary"
-                                                        onClick={handleClose}>Отменить
+                                                        onClick={handleClose}>{t('cancel')}
                                                 </button>
-                                                <button type="submit" className="btn btn-primary">Отправить</button>
+                                                <button type="submit" className="btn btn-primary">{t('post')}</button>
                                             </div>
                                         </div>
                                     </Form>

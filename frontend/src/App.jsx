@@ -9,6 +9,7 @@ import store from "./slices/index.js";
 import { Provider } from "react-redux";
 import SignUp from "./routes/SignUp";
 
+
 const AuthProvider = ({ children }) => {
   const [logStatus, setStatus] = useState(!!localStorage.getItem('Token'));
 
@@ -37,6 +38,10 @@ const ChatRoute = ({ children }) => {
 };
 
 const App = () => {
+
+
+
+
   const route = createBrowserRouter([
     {
       path: '/',

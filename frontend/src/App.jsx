@@ -1,12 +1,13 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import React, { useState } from 'react';
-import LoginForm from './routes/login/index.js';
+import LoginForm from './routes/login';
 import ErrorPage from './errors/wrongRoute.js';
 import AuthContext from './contexts/index.js';
 import Chat from './routes/Chat/Chat.jsx';
 import useAuth from './Hooks/index.js';
 import store from "./slices/index.js";
 import { Provider } from "react-redux";
+import SignUp from "./routes/SignUp";
 
 const AuthProvider = ({ children }) => {
   const [logStatus, setStatus] = useState(!!localStorage.getItem('Token'));
@@ -49,6 +50,10 @@ const App = () => {
     {
       path: '/login',
       element: <LoginForm />,
+    },
+    {
+      path: '/signup',
+      element: <SignUp />,
     },
   ]);
 

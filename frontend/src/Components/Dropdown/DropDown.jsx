@@ -5,9 +5,8 @@ import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 const DropDownChannel = ({ name, id, handleClick, currentChannelId, handleDeleteClick, handleChIdToAction, handleRenameClick }) => {
 
     const variant = id === currentChannelId ? 'secondary' : 'light';
-    handleChIdToAction(id);
     return (
-        <Dropdown className="d-flex btn-group" as={ButtonGroup}>
+        <Dropdown className="d-flex btn-group" as={ButtonGroup} onClick={() => handleChIdToAction(id)}>
             <Button
                 variant={variant}
                 className="w-100 rounded-0 text-start text-truncate btn"

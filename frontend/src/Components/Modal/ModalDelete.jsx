@@ -2,6 +2,9 @@ import React from "react";
 import './Modal.scss';
 import cn from 'classnames';
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
+
+
 
 const ModalDelete = (props) => {
 
@@ -14,7 +17,8 @@ const ModalDelete = (props) => {
         if(currentChannel === id){
             setDefaultChannel();
         }
-        closeHandler()
+        toast.success(t('channelDeleted'), {autoClose: 5000,});
+        closeHandler();
     };
 
     return (

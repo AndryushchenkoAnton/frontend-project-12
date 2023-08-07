@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import SignUp from "./routes/SignUp";
 
 
+
 const AuthProvider = ({ children }) => {
   const [logStatus, setStatus] = useState(!!localStorage.getItem('Token'));
 

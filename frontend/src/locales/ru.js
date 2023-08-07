@@ -30,7 +30,9 @@ export default {
         deleteAction: 'Удалить',
         renameChannel: 'Переименовать канал',
         renameAction: 'Переименовать',
-
-
+        channelAdded: 'Канал добавлен !',
+        channelDeleted: 'Канал удален !',
+        channelRenamed: 'Канал переименован !',
+        networkError: 'Ошибка сети !',
     },
 }

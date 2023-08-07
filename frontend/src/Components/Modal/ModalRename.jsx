@@ -5,6 +5,8 @@ import cn from "classnames";
 import {useSelector} from "react-redux";
 import {selectors as channelsSelectors} from "../../slices/channelsSlice";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
+
 
 const ModalRename = (props) => {
 
@@ -31,6 +33,8 @@ const ModalRename = (props) => {
         setValid(true);
         socket.emit('renameChannel', {id, name: name});
         handleClose();
+        toast.success(t('channelRenamed'), {autoClose: 5000,})
+
     };
 
     return(

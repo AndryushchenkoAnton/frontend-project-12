@@ -12,13 +12,12 @@ import cn from 'classnames';
 import ModalRename from '../../Components/Modal/ModalRename';
 import useAuth from "../../Hooks/index.js";
 import { useTranslation } from "react-i18next";
-
-const logoutHandler = () => {
-  localStorage.removeItem('Token');
-  localStorage.removeItem('userName');
-};
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import leoProfanity from 'leo-profanity';
 
 const Chat = () => {
+
 
   const dispatch = useDispatch();
   const store = useStore();
@@ -82,7 +81,6 @@ const Chat = () => {
   const Token = localStorage.getItem('Token');
   const [currentChannelId, setNewChannelId] = useState(1);
   const channels = Object.values(useSelector(channelsSelectors.selectEntities));
-  const messageCount = useSelector(messagesSelectors.selectTotal);
 
   const changeChannelHandler = (id) => () => {
     const newCurrentChannel = channels.find((channel) => channel.id === id);
@@ -138,7 +136,7 @@ const Chat = () => {
         <div className='text-break mb-2'>
           <b>{username}</b>
           :
-          {body}
+          {leoProfanity.clean(body)}
         </div>
       );
     });
@@ -234,7 +232,7 @@ const Chat = () => {
             </div>
           </div>
         </div>
-        <div className='Toastify' />
+        <ToastContainer />
       </div>
     </div>
         { modalDelete ? <ModalDelete show={modalDelete} closeHandler={closeDelete} id={modalChId} currentChannel={currentChannelId} socket={socket} setDefaultChannel={() => setNewChannelId(1)}/> : null }

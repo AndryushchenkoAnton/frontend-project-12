@@ -5,6 +5,8 @@ import cn from "classnames";
 import {selectors as channelsSelectors} from '../../slices/channelsSlice.js';
 import {useSelector} from "react-redux";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
+
 
 const ModalAdd = (props) => {
     const [valid, setValid] = useState(true);
@@ -31,6 +33,8 @@ const ModalAdd = (props) => {
         setValid(true);
         socket.emit('newChannel', {name: name});
         handleClose();
+        toast.success(t('channelAdded'), {autoClose: 5000,});
+
     };
 
     return (

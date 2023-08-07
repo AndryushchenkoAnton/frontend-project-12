@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from '../../Hooks/index.js';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
+import { toast } from 'react-toastify';
+
 
 const logInSchema = yup.object().shape({
   username: yup.string().min(5).required('Обязательное поле'),
@@ -58,6 +60,7 @@ const LoginForm = () => {
                         } catch (e) {
                           setUniqUser(false);
                           console.log('NetWorkError!');
+                          toast.error(t('networkError'));
                         }
                       }
                     }

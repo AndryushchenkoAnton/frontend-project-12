@@ -38,7 +38,7 @@ const ChatRoute = ({ children }) => {
 };
 
 const rollbarConfig = {
-  accessToken: 'a583820c122340be83d24ae3483b7a9a',
+  accessToken: '8266f58662e741418e2bd7bea392e987',
   environment: 'testenv',
 };
 

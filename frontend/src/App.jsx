@@ -67,17 +67,11 @@ const App = () => {
     },
   ]);
 
-  function TestError() {
-    const a = null;
-    return a.hello();
-  }
-
   return (
     <AuthProvider>
       <RollbarProvider config={rollbarConfig}>
         <ErrorBoundary>
         <RouterProvider router={route} />
-          <TestError />
         </ErrorBoundary>
       </RollbarProvider>
     </AuthProvider>

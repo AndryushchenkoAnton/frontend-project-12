@@ -43,10 +43,7 @@ const rollbarConfig = {
 };
 
 const App = () => {
-
-
-
-
+  
   const route = createBrowserRouter([
     {
       path: '/',

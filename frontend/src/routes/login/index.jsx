@@ -14,8 +14,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Form as ReactForm } from 'react-bootstrap';
 
 const logInSchema = yup.object().shape({
-  username: yup.string().min(5).required('Обязательное поле'),
-  password: yup.string().min(5).required('Обязательное поле'),
+  username: yup.string().required('Обязательное поле'),
+  password: yup.string().required('Обязательное поле'),
 });
 
 const LoginForm = () => {

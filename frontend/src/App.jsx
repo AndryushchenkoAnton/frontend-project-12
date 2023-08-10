@@ -1,14 +1,14 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import React, { useState } from 'react';
+import { Provider } from 'react-redux';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import LoginForm from './routes/login';
 import ErrorPage from './errors/wrongRoute.js';
 import AuthContext from './contexts/index.js';
 import Chat from './routes/Chat/Chat.jsx';
 import useAuth from './Hooks/index.js';
-import store from "./slices/index.js";
-import { Provider } from "react-redux";
-import SignUp from "./routes/SignUp";
-import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+import store from './slices/index.js';
+import SignUp from './routes/SignUp';
 
 const AuthProvider = ({ children }) => {
   const [logStatus, setStatus] = useState(!!localStorage.getItem('Token'));
@@ -43,13 +43,12 @@ const rollbarConfig = {
 };
 
 const App = () => {
-  
   const route = createBrowserRouter([
     {
       path: '/',
       element: (<ChatRoute>
         <Provider store={store}>
-         <Chat />
+          <Chat />
         </Provider>
       </ChatRoute>),
       errorElement: <ErrorPage />,
@@ -68,7 +67,7 @@ const App = () => {
     <AuthProvider>
       <RollbarProvider config={rollbarConfig}>
         <ErrorBoundary>
-        <RouterProvider router={route} />
+          <RouterProvider router={route} />
         </ErrorBoundary>
       </RollbarProvider>
     </AuthProvider>

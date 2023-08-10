@@ -31,7 +31,7 @@ export default {
         renameChannel: 'Переименовать канал',
         renameAction: 'Переименовать',
         channelAdded: 'Канал создан',
-        channelDeleted: 'Канал удален',
+        channelDeleted: 'Канал удалён',
         channelRenamed: 'Канал переименован',
         networkError: 'Ошибка сети',
     },

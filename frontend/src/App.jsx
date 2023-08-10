@@ -46,11 +46,13 @@ const App = () => {
   const route = createBrowserRouter([
     {
       path: '/',
-      element: (<ChatRoute>
+      element: (
+              <ChatRoute>
         <Provider store={store}>
           <Chat />
         </Provider>
-      </ChatRoute>),
+      </ChatRoute>
+      ),
       errorElement: <ErrorPage />,
     },
     {

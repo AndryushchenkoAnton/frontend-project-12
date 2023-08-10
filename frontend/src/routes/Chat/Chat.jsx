@@ -23,6 +23,7 @@ const Chat = () => {
   const { logStatus, logOut } = useAuth();
   const { t } = useTranslation();
   const messages = useSelector(messagesSelectors.selectAll);
+  const [currentChannelId, setNewChannelId] = useState(1);
   // Modal
   const [showed, setShow] = useState(false);
   const show = () => setShow(true);
@@ -77,7 +78,7 @@ const Chat = () => {
   // socket.on
 
   const Token = localStorage.getItem('Token');
-  const [currentChannelId, setNewChannelId] = useState(1);
+
   const channels = Object.values(useSelector(channelsSelectors.selectEntities));
 
   const changeChannelHandler = (id) => () => {
@@ -233,9 +234,25 @@ const Chat = () => {
           <ToastContainer />
         </div>
       </div>
-      { modalDelete ? <ModalDelete show={modalDelete} closeHandler={closeDelete} id={modalChId} currentChannel={currentChannelId} socket={socket} setDefaultChannel={() => setNewChannelId(1)} /> : null }
-      { modalAdd ? <ModalAdd show={showed} handleClose={closeAdd} socket={socket} /> : null }
-      { modalRename ? <ModalRename show={showed} id={modalChId} handleClose={closeRename} socket={socket} /> : null }
+      { modalDelete ? <ModalDelete
+          show={modalDelete}
+          closeHandler={closeDelete}
+          id={modalChId}
+          currentChannel={currentChannelId}
+          socket={socket}
+          setDefaultChannel={() => setNewChannelId(1)} />
+          : null }
+      { modalAdd ? <ModalAdd
+              show={showed}
+              handleClose={closeAdd}
+              socket={socket} />
+          : null }
+      { modalRename ? <ModalRename
+          show={showed}
+          id={modalChId}
+          handleClose={closeRename}
+          socket={socket} />
+          : null }
     </>
   );
 };

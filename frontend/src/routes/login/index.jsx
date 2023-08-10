@@ -62,6 +62,7 @@ const LoginForm = () => {
                           setUniqUser(true)
                           navigate('/');
                         } catch (e) {
+                          logOut();
                           if(e.response.status === 401){
                             setUniqUser(false);
                             return

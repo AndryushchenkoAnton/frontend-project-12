@@ -67,6 +67,7 @@ const LoginForm = () => {
                             console.log(e);
                             return
                           }
+                          setUniqUser(false);
                           toast(t('networkError'));
                         }
                       }

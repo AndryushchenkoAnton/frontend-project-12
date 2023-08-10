@@ -58,25 +58,26 @@ const ModalAdd = (props) => {
                 {({ values, handleChange }) => (
                   <Form>
                     <div>
-                          <Field
-                            name="name"
-                            id="name"
-                            className={cn('mb-2', 'form-control', { 'is-invalid': !valid })}
-                            value={values.name}
-                            onChange={handleChange}
-                          />
-                          <label className="visually-hidden" htmlFor="name">{t('channelName')}</label>
-                          <div className="invalid-feedback">{error}</div>
-                          <div className="d-flex justify-content-end">
-                            <button
-                                  type="button" className="me-2 btn btn-secondary"
-                                  onClick={handleClose}
-                                >
-                                  {t('cancel')}
-                                </button>
-                            <button type="submit" className="btn btn-primary">{t('post')}</button>
-                          </div>
-                        </div>
+                      <Field
+                        name="name"
+                        id="name"
+                        className={cn('mb-2', 'form-control', { 'is-invalid': !valid })}
+                        value={values.name}
+                        onChange={handleChange}
+                      />
+                      <label className="visually-hidden" htmlFor="name">{t('channelName')}</label>
+                      <div className="invalid-feedback">{error}</div>
+                      <div className="d-flex justify-content-end">
+                        <button
+                          type="button"
+                          className="me-2 btn btn-secondary"
+                          onClick={handleClose}
+                        >
+                          {t('cancel')}
+                        </button>
+                        <button type="submit" className="btn btn-primary">{t('post')}</button>
+                      </div>
+                    </div>
                   </Form>
                 )}
               </Formik>

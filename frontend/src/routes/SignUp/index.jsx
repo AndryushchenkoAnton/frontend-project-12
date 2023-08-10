@@ -44,93 +44,93 @@ const SignUp = () => {
               <div className="col-12 col-md-8 col-xxl-6">
                 <div className="card shadow-sm">
                   <div
-                      className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5"
-                    >
-                      <div>
-                        <img src={signUpImg} className="rounded-circle" alt="Регистрация" />
-                      </div>
-                      <Formik
-                        initialValues={{ username: '', password: '', confirmPassword: '' }}
-                        validationSchema={signUpSchema}
-                        validateOnChange={false}
-                        validateOnBlur={false}
-                        onSubmit={async (values) => {
-                              const { username, password } = values;
-                              try {
-                                const response = await axios.post('/api/v1/signup', { username, password });
-                                const { token } = response.data;
-                                localStorage.setItem('Token', token);
-                                localStorage.setItem('userName', username);
-                                setUniq(true);
-                                logIn();
-                                navigate('/');
-                              } catch (e) {
-                                setUniq(false);
-                              }
-                            }}
-                      >
-                        {({ values, handleChange, errors }) => (
-                              <Form className="w-50">
-                                  <h1 className="text-center mb-4">{t('registration')}</h1>
-                                  <div className="form-floating mb-3">
-                                      <Field
-                                          placeholder="От 3 до 20 символов"
-                                          name="username"
-                                          autoComplete="username"
-                                          required
-                                          id="username"
-                                          className={cn('form-control', { 'is-invalid': errors.username || !uniq })}
-                                          value={values.username}
-                                          onChange={handleChange}
-                                        />
-                                      <label className="form-label" htmlFor="username">{t('username')}</label>
-                                      <div
-                                          placement="right"
-                                          className="invalid-tooltip"
-                                        >
-                                          { t(errors.username) }
-                                        </div>
-                                    </div>
-                                  <div className="form-floating mb-3">
-                                      <Field
-                                          name="password"
-                                          placeholder="Не менее 6 символов"
-                                          aria-describedby="passwordHelpBlock"
-                                          required
-                                          autoComplete="new-password"
-                                          type="password"
-                                          id="password"
-                                          className={cn('form-control', { 'is-invalid': errors.password || !uniq })}
-                                          value={values.password}
-                                          onChange={handleChange}
-                                        />
-                                      <div
-                                          className="invalid-tooltip"
-                                        >
-                                          {t(errors.password)}
-                                        </div>
-                                      <label className="form-label" htmlFor="password">{t('password')}</label>
-                                    </div>
-                                  <div className="form-floating mb-4">
-                                      <Field
-                                          placeholder="Пароли должны совпадать"
-                                          name="confirmPassword"
-                                          required
-                                          autoComplete="new-password"
-                                          type="password"
-                                          id="confirmPassword"
-                                          className={cn('form-control', { 'is-invalid': errors.confirmPassword || !uniq })}
-                                          value={values.confirmPassword}
-                                          onChange={handleChange}
-                                        />
-                                      <div className="invalid-tooltip">{!uniq ? t('userAlreadyExh') : t(errors.confirmPassword)}</div>
-                                      <label className="form-label" htmlFor="confirmPassword">{t('confirmPasswordAction')}</label>
-                                    </div>
-                                  <button type="submit" className="w-100 btn btn-outline-primary">{t('register')}</button>
-                                </Form>
-                            )}
-                      </Formik>
+                    className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5"
+                  >
+                    <div>
+                      <img src={signUpImg} className="rounded-circle" alt="Регистрация" />
                     </div>
+                    <Formik
+                      initialValues={{ username: '', password: '', confirmPassword: '' }}
+                      validationSchema={signUpSchema}
+                      validateOnChange={false}
+                      validateOnBlur={false}
+                      onSubmit={async (values) => {
+                        const { username, password } = values;
+                        try {
+                          const response = await axios.post('/api/v1/signup', { username, password });
+                          const { token } = response.data;
+                          localStorage.setItem('Token', token);
+                          localStorage.setItem('userName', username);
+                          setUniq(true);
+                          logIn();
+                          navigate('/');
+                        } catch (e) {
+                          setUniq(false);
+                        }
+                      }}
+                    >
+                      {({ values, handleChange, errors }) => (
+                        <Form className="w-50">
+                          <h1 className="text-center mb-4">{t('registration')}</h1>
+                          <div className="form-floating mb-3">
+                            <Field
+                              placeholder="От 3 до 20 символов"
+                              name="username"
+                              autoComplete="username"
+                              required
+                              id="username"
+                              className={cn('form-control', { 'is-invalid': errors.username || !uniq })}
+                              value={values.username}
+                              onChange={handleChange}
+                            />
+                            <label className="form-label" htmlFor="username">{t('username')}</label>
+                            <div
+                              placement="right"
+                              className="invalid-tooltip"
+                            >
+                              { t(errors.username) }
+                            </div>
+                          </div>
+                          <div className="form-floating mb-3">
+                            <Field
+                              name="password"
+                              placeholder="Не менее 6 символов"
+                              aria-describedby="passwordHelpBlock"
+                              required
+                              autoComplete="new-password"
+                              type="password"
+                              id="password"
+                              className={cn('form-control', { 'is-invalid': errors.password || !uniq })}
+                              value={values.password}
+                              onChange={handleChange}
+                            />
+                            <div
+                              className="invalid-tooltip"
+                            >
+                              {t(errors.password)}
+                            </div>
+                            <label className="form-label" htmlFor="password">{t('password')}</label>
+                          </div>
+                          <div className="form-floating mb-4">
+                            <Field
+                              placeholder="Пароли должны совпадать"
+                              name="confirmPassword"
+                              required
+                              autoComplete="new-password"
+                              type="password"
+                              id="confirmPassword"
+                              className={cn('form-control', { 'is-invalid': errors.confirmPassword || !uniq })}
+                              value={values.confirmPassword}
+                              onChange={handleChange}
+                            />
+                            <div className="invalid-tooltip">{!uniq ? t('userAlreadyExh') : t(errors.confirmPassword)}</div>
+                            <label className="form-label" htmlFor="confirmPassword">{t('confirmPasswordAction')}</label>
+                          </div>
+                          <button type="submit" className="w-100 btn btn-outline-primary">{t('register')}</button>
+                        </Form>
+                      )}
+                    </Formik>
+                  </div>
                 </div>
               </div>
             </div>

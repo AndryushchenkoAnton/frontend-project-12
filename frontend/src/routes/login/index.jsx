@@ -49,6 +49,8 @@ const LoginForm = () => {
                     <Formik
                       initialValues={{ username: '', password: '' }}
                       validationSchema={logInSchema}
+                      validateOnChange={false}
+                      validateOnBlur={false}
                       onSubmit={async ({ username, password }) => {
                         try {
                           const response = await axios.post('/api/v1/login', { username, password });
@@ -58,8 +60,12 @@ const LoginForm = () => {
                           setUniqUser(true)
                           navigate('/');
                         } catch (e) {
-                          setUniqUser(false);
-                          console.log('NetWorkError!');
+                          if(e.response.status === 401){
+                            setUniqUser(false);
+                            console.log(e);
+                            return
+                          }
+                          console.log(e);
                           toast.error(t('networkError'));
                         }
                       }

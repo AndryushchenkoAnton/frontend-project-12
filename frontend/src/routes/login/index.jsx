@@ -10,7 +10,6 @@ import cn from 'classnames';
 import { toast } from 'react-toastify';
 import logInImg from './logIn.jpeg'
 
-
 const logInSchema = yup.object().shape({
   username: yup.string().min(5).required('Обязательное поле'),
   password: yup.string().min(5).required('Обязательное поле'),
@@ -75,7 +74,7 @@ const LoginForm = () => {
                               placeholder={t('yourNick')}
                               className={ cn('form-control', {'is-invalid' : errors.username || !uniqUser})}
                               id='username'
-                              autoComplete='username'
+                              autocomplete='username'
                               required
                               value={values.username}
                               onChange={handleChange}
@@ -86,7 +85,7 @@ const LoginForm = () => {
                           <div className='form-floating mb-4'>
                             <Field
                               name='password'
-                              autoComplete='current-password'
+                              autocomplete='current-password'
                               required
                               placeholder='Пароль'
                               type='password'
@@ -94,7 +93,6 @@ const LoginForm = () => {
                               className={ cn('form-control', {'is-invalid' : errors.username || !uniqUser})}
                               value={values.password}
                               onChange={handleChange}
-
                             />
                             <label htmlFor='password' className='form-label'>{t('password')}</label>
                             <div className="invalid-tooltip">{uniqUser ? null : t('wrongPasswordOrUsername')}</div>

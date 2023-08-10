@@ -101,7 +101,7 @@ const LoginForm = () => {
                               onChange={handleChange}
                             />
                             <label htmlFor='password' className='form-label'>{t('password')}</label>
-                            <div className="invalid-tooltip">{uniqUser ? null : t('wrongPasswordOrUsername')}</div>
+                            {uniqUser ? null : <div className="invalid-tooltip">{t('wrongPasswordOrUsername')}</div>}
                           </div>
                           <button type='submit' className='w-100 mb-3 btn btn-outline-primary'>{t('logIn')}</button>
                         </Form>

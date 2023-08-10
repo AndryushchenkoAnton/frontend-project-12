@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
 import logInImg from './logIn.jpeg'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const logInSchema = yup.object().shape({
   username: yup.string().min(5).required('Обязательное поле'),
@@ -65,8 +67,7 @@ const LoginForm = () => {
                             console.log(e);
                             return
                           }
-                          console.log(e);
-                          toast.error(t('networkError'));
+                          toast(t('networkError'));
                         }
                       }
                     }
@@ -124,7 +125,7 @@ const LoginForm = () => {
             </div>
           </div>
         </div>
-        <div className='Toastify' />
+        <ToastContainer/>
       </div>
     </div>
 

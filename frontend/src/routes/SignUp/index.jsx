@@ -7,6 +7,7 @@ import cn from 'classnames'
 import {useNavigate} from "react-router-dom";
 import useAuth from "../../Hooks/index.js";
 import { useTranslation } from 'react-i18next';
+import signUpImg from './signUp.jpg';
 
 const signUpSchema = yup.object().shape({
     username: yup.string()
@@ -46,7 +47,7 @@ const SignUp = () => {
                                     <div
                                         className='card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5'>
                                         <div>
-                                            <img src='../../Img/imgSignUp.jpg' className='rounded-circle' alt='Регистрация' />
+                                            <img src={signUpImg} className='rounded-circle' alt='Регистрация' />
                                         </div>
                                         <Formik
                                             initialValues={{username: '', password: '', confirmPassword: ''}}

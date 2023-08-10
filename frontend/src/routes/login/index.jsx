@@ -79,6 +79,7 @@ const LoginForm = () => {
                           <h1 className='text-center mb-4'>Войти</h1>
                           <div className='form-floating mb-3'>
                             <Field
+                              autoFocus
                               name='username'
                               placeholder={t('yourNick')}
                               className={ cn('form-control', {'is-invalid' : errors.username || !uniqUser})}
@@ -108,7 +109,7 @@ const LoginForm = () => {
                                 type='invalid'
                             >{t('wrongPasswordOrUsername')}</ReactForm.Control.Feedback>}
                           </div>
-                          <button type='submit' className='w-100 mb-3 btn btn-outline-primary'>{t('logIn')}</button>
+                          <button type='submit'  className='w-100 mb-3 btn btn-outline-primary'>{t('logIn')}</button>
                         </Form>
                       )}
                     </Formik>

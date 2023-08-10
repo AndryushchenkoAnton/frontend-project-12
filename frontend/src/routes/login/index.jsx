@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import logInImg from './logIn.jpeg'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Form as ReactForm } from 'react-bootstrap';
 
 const logInSchema = yup.object().shape({
   username: yup.string().min(5).required('Обязательное поле'),
@@ -103,7 +104,9 @@ const LoginForm = () => {
                               onChange={handleChange}
                             />
                             <label htmlFor='password' className='form-label'>{t('password')}</label>
-                            {uniqUser ? null : <div className="invalid-tooltip">{t('wrongPasswordOrUsername')}</div>}
+                            {uniqUser ? null : <ReactForm.Control.Feedback
+                                type='invalid'
+                            >{t('wrongPasswordOrUsername')}</ReactForm.Control.Feedback>}
                           </div>
                           <button type='submit' className='w-100 mb-3 btn btn-outline-primary'>{t('logIn')}</button>
                         </Form>
@@ -134,3 +137,4 @@ const LoginForm = () => {
 };
 export default LoginForm;
 
+//<div className="invalid-tooltip">{t('wrongPasswordOrUsername')}</div>

@@ -234,16 +234,17 @@ const Chat = () => {
           <ToastContainer />
         </div>
       </div>
-       {modalDelete ?
-       <ModalDelete show={modalDelete}
+      {modalDelete
+       ? <ModalDelete
+       show={modalDelete}
        closeHandler={closeDelete}
        id={modalChId}
        currentChannel={currentChannelId}
        socket={socket}
        setDefaultChannel={() => setNewChannelId(1)} />
        : null }
-       {modalAdd ? <ModalAdd show={showed} handleClose={closeAdd} socket={socket} /> : null}
-       {modalRename ?
+      {modalAdd ? <ModalAdd show={showed} handleClose={closeAdd} socket={socket} /> : null}
+      {modalRename ?
        <ModalRename
        show={showed}
        id={modalChId}

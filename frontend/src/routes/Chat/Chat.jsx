@@ -107,7 +107,7 @@ const Chat = () => {
     const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', { 'btn-secondary': currentChannelId === channel.id });
     if (!channel.removable) {
       return (
-        <li className="nav-item w-100">
+        <li key={channel.id} className="nav-item w-100">
           <button onClick={changeChannelHandler(channel.id)} type="button" className={classNameLi}>
             <span className="me-1">#</span>
             {channel.name}

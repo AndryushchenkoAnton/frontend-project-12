@@ -8,9 +8,9 @@ build:
 	npm run build
 
 fix:
-	npx eslint --fix .
+	npx npx eslint --ext js,jsx --no-eslintrc --config .eslintrc.yml --fix .
 
 lint:
-	npx eslint .
+	npx eslint --ext js,jsx --no-eslintrc --config .eslintrc.yml  .
 
 

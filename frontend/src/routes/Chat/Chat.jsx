@@ -250,7 +250,8 @@ const Chat = () => {
             show={showed}
             id={modalChId}
             handleClose={closeRename}
-            socket={socket} />)
+            socket={socket}
+          />)
         : null}
     </>
   );

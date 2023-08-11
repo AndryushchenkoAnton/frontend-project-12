@@ -100,7 +100,8 @@ const Chat = () => {
 
   useEffect(() => {
     getChatData(Token);
-  }, []);
+
+  }, [dispatch]);
 
   const renderedChannels = channelsStorage.map((channel) => {
     const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', { 'btn-secondary': currentChannelId === channel.id });
@@ -149,7 +150,6 @@ const Chat = () => {
     }
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open');
-    console.log(messagesStorage);
   }, [currentChannelId, showed]);
 
   return (

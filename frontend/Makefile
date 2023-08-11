@@ -10,4 +10,7 @@ build:
 fix:
 	npx eslint --fix .
 
+lint:
+	npx eslint .
+
 

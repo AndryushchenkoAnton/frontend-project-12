@@ -100,8 +100,7 @@ const Chat = () => {
 
   useEffect(() => {
     getChatData(Token);
-
-  }, [dispatch]);
+  }, [getChatData, Token]);
 
   const renderedChannels = channelsStorage.map((channel) => {
     const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', { 'btn-secondary': currentChannelId === channel.id });

@@ -27,8 +27,6 @@ rules:
   functional/no-conditional-statement: 0
   functional/no-expression-statement: 0
   functional/immutable-data: 0
-  react/jsx-wrap-multilines: 0
-  react/jsx-closing-bracket-location: 0
   functional/functional-parameters: 0
   functional/no-try-statement: 0
   functional/no-throw-statement: 0

@@ -48,10 +48,10 @@ const App = () => {
       path: '/',
       element: (
         <ChatRoute>
-                <Provider store={store}>
-                    <Chat />
-                </Provider>
-              </ChatRoute>
+          <Provider store={store}>
+                  <Chat />
+          </Provider>
+        </ChatRoute>
       ),
       errorElement: <ErrorPage />,
     },

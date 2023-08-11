@@ -236,14 +236,14 @@ const Chat = () => {
         </div>
       </div>
       {modalDelete
-        ? (<
-            ModalDelete
+        ? (<ModalDelete
             show={modalDelete}
             closeHandler={closeDelete}
             idToDelete={modalChId}
             currentChannel={currentChannelId}
             socket={socket}
-            setDefaultChannel={() => setNewChannelId(1)} />)
+            setDefaultChannel={() => setNewChannelId(1)}
+          />)
         : null}
       {modalAdd ? (<ModalAdd show={showed} handleClose={closeAdd} socket={socket} />) : null}
       {modalRename

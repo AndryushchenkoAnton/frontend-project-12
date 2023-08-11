@@ -22,7 +22,7 @@ const Chat = () => {
   const { socket } = store.getState().socket;
   const { logStatus, logOut } = useAuth();
   const { t } = useTranslation();
-  const messages = useSelector(messagesSelectors.selectAll);
+  const messagesStorage = useSelector(messagesSelectors.selectAll);
   const [currentChannelId, setNewChannelId] = useState(1);
   // Modal
   const [showed, setShow] = useState(false);
@@ -79,10 +79,10 @@ const Chat = () => {
 
   const Token = localStorage.getItem('Token');
 
-  const channels = Object.values(useSelector(channelsSelectors.selectEntities));
+  const channelsStorage = Object.values(useSelector(channelsSelectors.selectEntities));
 
   const changeChannelHandler = (id) => () => {
-    const newCurrentChannel = channels.find((channel) => channel.id === id);
+    const newCurrentChannel = channelsStorage.find((channel) => channel.id === id);
     setNewChannelId(newCurrentChannel.id);
   };
 
@@ -102,7 +102,7 @@ const Chat = () => {
     getChatData(Token);
   }, []);
 
-  const renderedChannels = channels.map((channel) => {
+  const renderedChannels = channelsStorage.map((channel) => {
     const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', { 'btn-secondary': currentChannelId === channel.id });
     if (!channel.removable) {
       return (
@@ -149,7 +149,7 @@ const Chat = () => {
     }
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open');
-    console.log(messages);
+    console.log(messagesStorage);
   }, [currentChannelId, showed]);
 
   return (
@@ -186,7 +186,7 @@ const Chat = () => {
                       <p className="m-0">
                         <b># general</b>
                       </p>
-                      <span className="text-muted">{t('count_message', { count: messages.filter((m) => m.channelId === currentChannelId).length })}</span>
+                      <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannelId).length })}</span>
                     </div>
                     <div id="messages-box" className="chat-messages overflow-auto px-5 ">
                       {renderedMessages}

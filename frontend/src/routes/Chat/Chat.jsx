@@ -236,8 +236,8 @@ const Chat = () => {
         </div>
       </div>
       {modalDelete
-        ?
-        (<ModalDelete
+        ? (
+          <ModalDelete
             show={modalDelete}
             closeHandler={closeDelete}
             idToDelete={modalChId}
@@ -249,7 +249,8 @@ const Chat = () => {
         : null}
       {modalAdd ? (<ModalAdd show={showed} handleClose={closeAdd} socket={socket} />) : null}
       {modalRename
-        ? (<ModalRename
+        ? (
+          <ModalRename
             show={showed}
             id={modalChId}
             handleClose={closeRename}

@@ -100,7 +100,8 @@ const Chat = () => {
 
   useEffect(() => {
     getChatData(Token);
-  }, [ Token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Token]);
 
   const renderedChannels = channelsStorage.map((channel) => {
     const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', { 'btn-secondary': currentChannelId === channel.id });

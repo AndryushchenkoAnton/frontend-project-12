@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 const ModalDelete = (props) => {
   const {
-    show, closeHandler, id, socket, setDefaultChannel, currentChannel,
+    show, closeHandler, idToDelete, socket, setDefaultChannel, currentChannel,
   } = props;
   const fadeClass = cn('fade', 'modal-backdrop', { show });
   const dialogClass = cn('fade', 'modal', { show });
@@ -46,7 +46,7 @@ const ModalDelete = (props) => {
               <p className="lead">{t('deleteConfirmation')}</p>
               <div className="d-flex justify-content-end">
                 <button type="button" className="me-2 btn btn-secondary" onClick={closeHandler}>{t('cancel')}</button>
-                <button type="button" className="btn btn-danger" onClick={deleteHandler(id)}>{t('deleteAction')}</button>
+                <button type="button" className="btn btn-danger" onClick={deleteHandler(idToDelete)}>{t('deleteAction')}</button>
               </div>
             </div>
           </div>

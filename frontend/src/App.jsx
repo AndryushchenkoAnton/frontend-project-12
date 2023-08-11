@@ -49,7 +49,7 @@ const App = () => {
       element: (
         <ChatRoute>
           <Provider store={store}>
-                  <Chat />
+            <Chat />
           </Provider>
         </ChatRoute>
       ),

@@ -244,7 +244,8 @@ const Chat = () => {
             socket={socket}
             setDefaultChannel={() => setNewChannelId(1)}
           />)
-        : null}
+        : null
+      }
       {modalAdd ? (<ModalAdd show={showed} handleClose={closeAdd} socket={socket} />) : null}
       {modalRename
         ? (<ModalRename
@@ -253,7 +254,8 @@ const Chat = () => {
             handleClose={closeRename}
             socket={socket}
           />)
-        : null}
+        : null
+      }
     </>
   );
 };

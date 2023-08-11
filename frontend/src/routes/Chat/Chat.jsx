@@ -118,6 +118,7 @@ const Chat = () => {
       <DropDownChannel
         name={channel.name}
         id={channel.id}
+        key={channel.id}
         currentChannelId={currentChannelId}
         handleClick={changeChannelHandler(channel.id)}
         handleDeleteClick={showDelete}
@@ -132,7 +133,7 @@ const Chat = () => {
     .map((message) => {
       const { body, username } = message;
       return (
-        <div className="text-break mb-2">
+        <div key={message.id} className="text-break mb-2">
           <b>{username}</b>
           :
           {leoProfanity.clean(body)}

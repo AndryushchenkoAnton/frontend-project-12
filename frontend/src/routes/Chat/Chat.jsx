@@ -184,7 +184,10 @@ const Chat = () => {
                   <div className="d-flex flex-column h-100">
                     <div className="bg-light mb-4 p-3 shadow-sm small">
                       <p className="m-0">
-                        <b># general</b>
+                        <b>
+                          #
+                          {channelsStorage.find((ch) => ch.id === currentChannelId).name}
+                        </b>
                       </p>
                       <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannelId).length })}</span>
                     </div>

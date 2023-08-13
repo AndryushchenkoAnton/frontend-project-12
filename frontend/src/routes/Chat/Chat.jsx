@@ -141,8 +141,7 @@ const Chat = () => {
         </div>
       );
     });
-  console.log('hereIm')
-  console.log(channelsStorage.find((ch) => ch.id === currentChannelId));
+
   useEffect(() => {
     if (showed) {
       document.body.classList.add('modal-open');
@@ -187,7 +186,7 @@ const Chat = () => {
                       <p className="m-0">
                         <b>
                           #
-                          here
+                          {channelsStorage.find((ch) => ch.id === currentChannelId) || 'general'}
                         </b>
                       </p>
                       <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannelId).length })}</span>

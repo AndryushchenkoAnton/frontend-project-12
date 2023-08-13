@@ -153,7 +153,7 @@ const Chat = () => {
     document.body.classList.remove('modal-open');
   }, [currentChannelId, showed]);
 
-  const currentChannel = useSelector((state) => channelsSelectors.selectById(state, currentChannelId));
+  const channel = useSelector((state) => channelsSelectors.selectById(state, currentChannelId));
 
   return (
     <>
@@ -189,7 +189,7 @@ const Chat = () => {
                       <p className="m-0">
                         <b>
                           #
-                          { currentChannel  ? currentChannel.name : 'general'}
+                          { channel ? channel.name : 'general'}
                         </b>
                       </p>
                       <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannelId).length })}</span>

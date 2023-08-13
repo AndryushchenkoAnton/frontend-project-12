@@ -115,6 +115,7 @@ const Chat = () => {
         </li>
       );
     }
+
     return (
       <DropDownChannel
         name={channel.name}
@@ -152,6 +153,8 @@ const Chat = () => {
     document.body.classList.remove('modal-open');
   }, [currentChannelId, showed]);
 
+  const currentChannel = useSelector((state) => channelsSelectors.selectById(state, currentChannelId));
+
   return (
     <>
       <div className="h-100">
@@ -186,7 +189,7 @@ const Chat = () => {
                       <p className="m-0">
                         <b>
                           #
-                          {channelsStorage.find((ch) => ch.id === currentChannelId) || 'general'}
+                          { currentChannel  ? currentChannel.name : 'general'}
                         </b>
                       </p>
                       <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannelId).length })}</span>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import './Modal.scss';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -6,17 +6,15 @@ import { toast } from 'react-toastify';
 
 const ModalDelete = (props) => {
   const {
-    show, closeHandler, idToDelete, socket, setDefaultChannel, currentChannel,
+    show, closeHandler, idToDelete, socket,
   } = props;
   const fadeClass = cn('fade', 'modal-backdrop', { show });
   const dialogClass = cn('fade', 'modal', { show });
   const { t } = useTranslation();
+  const toastSuccess = useCallback(() => toast.success(t('channelDeleted'), { autoClose: 5000 }), [t]);
   const deleteHandler = (id) => () => {
     socket.emit('removeChannel', { id });
-    if (currentChannel === id) {
-      setDefaultChannel();
-    }
-    toast.success(t('channelDeleted'), { autoClose: 5000 });
+    toastSuccess();
     closeHandler();
   };
 

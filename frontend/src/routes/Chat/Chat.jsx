@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useRef,
+} from 'react';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import axios from 'axios';
 import cn from 'classnames';
@@ -24,6 +26,7 @@ const Chat = () => {
   const { t } = useTranslation();
   const messagesStorage = useSelector(messagesSelectors.selectAll);
   const [currentChannelId, setNewChannelId] = useState(1);
+  const messagesEndRef = useRef(null);
   // Modal
   const [showed, setShow] = useState(false);
   const show = () => setShow(true);
@@ -62,23 +65,31 @@ const Chat = () => {
   // Modal
 
   // socket.on
-  socket.on('newMessage', (payload) => {
-    dispatch(messagesActions.addMessage(payload));
-  });
-  socket.on('newChannel', (payload) => {
-    dispatch(channelsActions.addChannel(payload));
-    setNewChannelId(payload.id);
-  });
-  socket.on('removeChannel', ({ id }) => {
-    dispatch(channelsActions.removeChannel(id));
-  });
-  socket.on('renameChannel', (payload) => {
-    dispatch(channelsActions.renameChannel({ id: payload.id, changes: payload }));
-  });
+  useEffect(() => {
+    socket.on('newMessage', (payload) => {
+      dispatch(messagesActions.addMessage(payload));
+    });
+    socket.on('newChannel', (payload) => {
+      console.log(payload);
+      dispatch(channelsActions.addChannel(payload));
+      if (payload.userName === localStorage.getItem('userName')) {
+        setNewChannelId(payload.id);
+      }
+    });
+    socket.on('removeChannel', ({ id }) => {
+      dispatch(channelsActions.removeChannel(id));
+      if (id === currentChannelId) {
+        setNewChannelId(1);
+      }
+    });
+    socket.on('renameChannel', (payload) => {
+      dispatch(channelsActions.renameChannel({ id: payload.id, changes: payload }));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentChannelId]);
   // socket.on
 
   const Token = localStorage.getItem('Token');
-
   const channelsStorage = Object.values(useSelector(channelsSelectors.selectEntities));
 
   const changeChannelHandler = (id) => () => {
@@ -151,7 +162,11 @@ const Chat = () => {
     }
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChannelId, showed]);
+  useEffect(() => {
+    messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+  }, [renderedMessages]);
 
   const channel = useSelector((state) => channelsSelectors.selectById(state, currentChannelId));
 
@@ -194,7 +209,7 @@ const Chat = () => {
                       </p>
                       <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannelId).length })}</span>
                     </div>
-                    <div id="messages-box" className="chat-messages overflow-auto px-5 ">
+                    <div id="messages-box" className="chat-messages overflow-auto px-5 " ref={messagesEndRef}>
                       {renderedMessages}
                     </div>
                     <div className="mt-auto px-5 py-3">
@@ -250,10 +265,17 @@ const Chat = () => {
             currentChannel={currentChannelId}
             socket={socket}
             setDefaultChannel={() => setNewChannelId(1)}
+
           />
         )
         : null}
-      {modalAdd ? (<ModalAdd show={showed} handleClose={closeAdd} socket={socket} />) : null}
+      {modalAdd ? (
+        <ModalAdd
+          show={modalAdd && showed}
+          handleClose={() => closeAdd()}
+          socket={socket}
+        />
+      ) : null}
       {modalRename
         ? (
           <ModalRename

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './Modal.scss';
 import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
@@ -17,7 +17,9 @@ const ModalRename = (props) => {
   const firstModalDiv = cn('fade', 'modal-backdrop', { show });
   const secondModalDiv = cn('fade', 'modal', { show });
   const channels = Object.values(useSelector(channelsSelectors.selectEntities));
+  const currentChannel = useSelector((state) => channelsSelectors.selectById(state, id));
   const names = channels.map((channel) => channel.name);
+  const toastSuccess = useCallback(() => toast.success(t('channelRenamed'), { autoClose: 5000 }), [t]);
   const handleSubmit = ({ name }) => {
     if (names.includes(name)) {
       setError(t('mustBeUniq'));
@@ -32,8 +34,11 @@ const ModalRename = (props) => {
     setValid(true);
     socket.emit('renameChannel', { id, name });
     handleClose();
-    toast.success(t('channelRenamed'), { autoClose: 5000 });
+    toastSuccess();
   };
+  useEffect(() => {
+    document.getElementsByName('name')[0].focus();
+  }, []);
 
   return (
     <>
@@ -53,7 +58,7 @@ const ModalRename = (props) => {
             </div>
             <div className="modal-body">
               <Formik
-                initialValues={{ name: '' }}
+                initialValues={{ name: currentChannel.name }}
                 onSubmit={handleSubmit}
               >
                 {({ values, handleChange }) => (

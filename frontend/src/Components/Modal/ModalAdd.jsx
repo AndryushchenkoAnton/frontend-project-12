@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './Modal.scss';
 import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
@@ -11,12 +11,14 @@ const ModalAdd = (props) => {
   const [valid, setValid] = useState(true);
   const [error, setError] = useState(null);
   const { t } = useTranslation();
-
-  const { show, handleClose, socket } = props;
+  const {
+    show, handleClose, socket,
+  } = props;
   const firstModalDiv = cn('fade', 'modal-backdrop', { show });
   const secondModalDiv = cn('fade', 'modal', { show });
   const channels = Object.values(useSelector(channelsSelectors.selectEntities));
   const names = channels.map((channel) => channel.name);
+  const toastSuccess = useCallback(() => toast.success(t('channelAdded'), { autoClose: 5000 }), [t]);
   const handleSubmit = ({ name }) => {
     if (names.includes(name)) {
       setError(t('mustBeUniq'));
@@ -29,9 +31,9 @@ const ModalAdd = (props) => {
     }
     setError(null);
     setValid(true);
-    socket.emit('newChannel', { name });
+    socket.emit('newChannel', { name, userName: localStorage.getItem('userName') });
     handleClose();
-    toast.success(t('channelAdded'), { autoClose: 5000 });
+    toastSuccess();
   };
 
   return (
@@ -61,6 +63,7 @@ const ModalAdd = (props) => {
                       <Field
                         name="name"
                         id="name"
+                        autoFocus
                         className={cn('mb-2', 'form-control', { 'is-invalid': !valid })}
                         value={values.name}
                         onChange={handleChange}

@@ -65,28 +65,24 @@ const Chat = () => {
   // Modal
 
   // socket.on
-  useEffect(() => {
-    socket.on('newMessage', (payload) => {
-      dispatch(messagesActions.addMessage(payload));
-    });
-    socket.on('newChannel', (payload) => {
-      console.log(payload);
-      dispatch(channelsActions.addChannel(payload));
-      if (payload.userName === localStorage.getItem('userName')) {
-        setNewChannelId(payload.id);
-      }
-    });
-    socket.on('removeChannel', ({ id }) => {
-      dispatch(channelsActions.removeChannel(id));
-      if (id === currentChannelId) {
-        setNewChannelId(1);
-      }
-    });
-    socket.on('renameChannel', (payload) => {
-      dispatch(channelsActions.renameChannel({ id: payload.id, changes: payload }));
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentChannelId]);
+  socket.on('newMessage', (payload) => {
+    dispatch(messagesActions.addMessage(payload));
+  });
+  socket.on('newChannel', (payload) => {
+    dispatch(channelsActions.addChannel(payload));
+    if (payload.userName === localStorage.getItem('userName')) {
+      setNewChannelId(payload.id);
+    }
+  });
+  socket.on('removeChannel', ({ id }) => {
+    dispatch(channelsActions.removeChannel(id));
+    if (id === currentChannelId) {
+      setNewChannelId(1);
+    }
+  });
+  socket.on('renameChannel', (payload) => {
+    dispatch(channelsActions.renameChannel({ id: payload.id, changes: payload }));
+  });
   // socket.on
 
   const Token = localStorage.getItem('Token');
@@ -262,10 +258,7 @@ const Chat = () => {
             show={modalDelete}
             closeHandler={closeDelete}
             idToDelete={modalChId}
-            currentChannel={currentChannelId}
             socket={socket}
-            setDefaultChannel={() => setNewChannelId(1)}
-
           />
         )
         : null}

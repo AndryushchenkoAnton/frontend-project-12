@@ -11,15 +11,15 @@ import store from './slices/index.js';
 import SignUp from './routes/SignUp';
 
 const AuthProvider = ({ children }) => {
-  const [logStatus, setStatus] = useState(!!localStorage.getItem('Token'));
+  const [logStatus, setLogStatus] = useState(!!localStorage.getItem('Token'));
 
   const logIn = () => {
-    setStatus(true);
+    setLogStatus(true);
   };
 
   const logOut = () => {
     localStorage.removeItem('Token');
-    setStatus(false);
+    setLogStatus(false);
   };
 
   return (

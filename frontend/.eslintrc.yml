@@ -25,7 +25,6 @@ rules:
   react/no-unknown-property: 0
   no-console: 0
   react/react-in-jsx-scope: 0
-  react-hooks/rules-of-hooks: 0
   functional/no-conditional-statements: 0
   react/jsx-no-constructed-context-values: 0
   functional/no-expression-statement: 0

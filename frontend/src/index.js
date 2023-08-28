@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
 import localeInit from './init.jsx';
 
 const app = async () => {
@@ -14,4 +13,3 @@ const app = async () => {
 };
 
 app();
-reportWebVitals();

@@ -20,7 +20,9 @@ const logInSchema = yup.object().shape({
 const LoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { logStatus, logIn, logOut } = useAuth();
+  const {
+    logStatus, logIn, logOut, setToken, setUsername,
+  } = useAuth();
   const [uniqUser, setUniqUser] = useState(true);
   return (
 
@@ -55,8 +57,8 @@ const LoginForm = () => {
                       onSubmit={async ({ username, password }) => {
                         try {
                           const response = await axios.post('/api/v1/login', { username, password });
-                          localStorage.setItem('Token', response.data.token);
-                          localStorage.setItem('userName', username);
+                          setToken(response.data.token);
+                          setUsername(username);
                           logIn();
                           setUniqUser(true);
                           navigate('/');

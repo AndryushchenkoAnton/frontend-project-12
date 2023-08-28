@@ -1,15 +1,15 @@
 import React, {
   useEffect, useState, useRef,
 } from 'react';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import axios from 'axios';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { Field, Form, Formik } from 'formik';
-import { actions as channelsActions, selectors as channelsSelectors } from '../../slices/channelsSlice.js';
-import { actions as messagesActions, selectors as messagesSelectors } from '../../slices/messagesSlice.js';
+import { actions as channelsActions } from '../../Slices/channelsSlice.js';
+import { actions as messagesActions } from '../../Slices/messagesSlice.js';
 import './Chat.scss';
 import ModalAdd from '../../Components/Modal/ModalAdd.jsx';
 import ModalDelete from '../../Components/Modal/ModalDelete.jsx';
@@ -17,14 +17,17 @@ import DropDownChannel from '../../Components/Dropdown/DropDown.jsx';
 import ModalRename from '../../Components/Modal/ModalRename';
 import useAuth from '../../Hooks/index.js';
 import 'react-toastify/dist/ReactToastify.css';
+import { getChannelById, getChannels, getMessages } from '../../SelectorFunctions';
 
 const Chat = () => {
   const dispatch = useDispatch();
   const store = useStore();
   const { socket } = store.getState().socket;
-  const { logStatus, logOut } = useAuth();
+  const {
+    logStatus, logOut, getUsername, getToken,
+  } = useAuth();
   const { t } = useTranslation();
-  const messagesStorage = useSelector(messagesSelectors.selectAll);
+  const messagesStorage = getMessages();
   const [currentChannelId, setNewChannelId] = useState(1);
   const messagesEndRef = useRef(null);
   // Modal
@@ -70,7 +73,7 @@ const Chat = () => {
   });
   socket.on('newChannel', (payload) => {
     dispatch(channelsActions.addChannel(payload));
-    if (payload.userName === localStorage.getItem('userName')) {
+    if (payload.userName === getUsername()) {
       setNewChannelId(payload.id);
     }
   });
@@ -85,8 +88,8 @@ const Chat = () => {
   });
   // socket.on
 
-  const Token = localStorage.getItem('Token');
-  const channelsStorage = Object.values(useSelector(channelsSelectors.selectEntities));
+  const Token = getToken();
+  const channelsStorage = getChannels();
 
   const changeChannelHandler = (id) => () => {
     const newCurrentChannel = channelsStorage.find((channel) => channel.id === id);
@@ -94,15 +97,20 @@ const Chat = () => {
   };
 
   const getChatData = async (token) => {
-    const response = await axios.get('/api/v1/data', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const response = await axios.get('/api/v1/data', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    const { messages, channels } = response.data;
-    dispatch(channelsActions.addChannels(channels));
-    dispatch(messagesActions.addMessages(messages));
+      const { messages, channels } = response.data;
+      dispatch(channelsActions.addChannels(channels));
+      dispatch(messagesActions.addMessages(messages));
+    } catch (e) {
+      console.log(e);
+      toast(t('networkError'));
+    }
   };
 
   useEffect(() => {
@@ -137,7 +145,7 @@ const Chat = () => {
     );
   });
 
-  const renderedMessages = Object.values(useSelector(messagesSelectors.selectEntities))
+  const renderedMessages = getMessages()
     .filter((message) => message.channelId === currentChannelId)
     .map((message) => {
       const { body, username } = message;
@@ -153,7 +161,7 @@ const Chat = () => {
   useEffect(() => {
     if (showed) {
       document.body.classList.add('modal-open');
-      document.body.setAttribute('data-rr-ui-modal-open', true);
+      document.body.setAttribute('data-rr-ui-modal-open', 'true');
       return;
     }
     document.body.removeAttribute('data-rr-ui-modal-open');
@@ -164,7 +172,7 @@ const Chat = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   }, [renderedMessages]);
 
-  const channel = useSelector((state) => channelsSelectors.selectById(state, currentChannelId));
+  const channel = getChannelById(currentChannelId);
 
   return (
     <>
@@ -212,7 +220,7 @@ const Chat = () => {
                       <Formik
                         initialValues={{ body: '' }}
                         onSubmit={(values, { resetForm }) => {
-                          const name = localStorage.getItem('userName');
+                          const name = getUsername();
                           socket.emit('newMessage', { body: values.body, channelId: currentChannelId, username: name }, (response) => console.log(response));
                           resetForm({ values: '' });
                         }}

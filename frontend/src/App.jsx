@@ -2,11 +2,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
-import LoginForm from './routes/login';
-import ErrorPage from './errors/wrongRoute.js';
-import Chat from './routes/Chat/Chat.jsx';
-import store from './slices/index.js';
-import SignUp from './routes/SignUp';
+import LoginForm from './RouteComponents/Login';
+import ErrorPage from './Errors/wrongRoute.js';
+import Chat from './RouteComponents/Chat/Chat.jsx';
+import store from './Slices/index.js';
+import SignUp from './RouteComponents/SignUp';
 import AuthProvider from './Components/AuthProvider/AuthProvider';
 import ChatRoute from './Components/ChatRoute/ChatRoute';
 
@@ -29,7 +29,7 @@ const App = () => {
       errorElement: <ErrorPage />,
     },
     {
-      path: '/login',
+      path: '/Login',
       element: <LoginForm />,
     },
     {

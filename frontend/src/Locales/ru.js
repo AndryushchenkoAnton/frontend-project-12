@@ -34,5 +34,7 @@ export default {
     channelDeleted: 'Канал удалён',
     channelRenamed: 'Канал переименован',
     networkError: 'Ошибка сети',
+    notFoundError: 'Not found !',
+    channelManagingTools: 'Управление каналом',
   },
 };

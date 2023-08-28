@@ -2,21 +2,22 @@ import React, { useCallback, useState } from 'react';
 import './Modal.scss';
 import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { selectors as channelsSelectors } from '../../slices/channelsSlice.js';
+import useAuth from '../../Hooks/index.js';
+import { getChannels } from '../../SelectorFunctions';
 
 const ModalAdd = (props) => {
   const [valid, setValid] = useState(true);
   const [error, setError] = useState(null);
   const { t } = useTranslation();
+  const { getUsername } = useAuth();
   const {
     show, handleClose, socket,
   } = props;
   const firstModalDiv = cn('fade', 'modal-backdrop', { show });
   const secondModalDiv = cn('fade', 'modal', { show });
-  const channels = Object.values(useSelector(channelsSelectors.selectEntities));
+  const channels = getChannels();
   const names = channels.map((channel) => channel.name);
   const toastSuccess = useCallback(() => toast.success(t('channelAdded'), { autoClose: 5000 }), [t]);
   const handleSubmit = ({ name }) => {
@@ -31,7 +32,7 @@ const ModalAdd = (props) => {
     }
     setError(null);
     setValid(true);
-    socket.emit('newChannel', { name, userName: localStorage.getItem('userName') });
+    socket.emit('newChannel', { name, userName: getUsername() });
     handleClose();
     toastSuccess();
   };

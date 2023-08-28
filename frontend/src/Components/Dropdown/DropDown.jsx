@@ -19,7 +19,7 @@ const DropDownChannel = ({
         {name}
       </Button>
       <DropdownToggle variant={variant}>
-        <span className="visually-hidden">Управление каналом</span>
+        <span className="visually-hidden">{t('channelManagingTools')}</span>
       </DropdownToggle>
 
       <Dropdown.Menu>

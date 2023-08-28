@@ -26,7 +26,9 @@ const SignUp = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [uniq, setUniq] = useState(true);
-  const { logStatus, logIn, logOut } = useAuth();
+  const {
+    logStatus, logIn, logOut, setUsername, setToken,
+  } = useAuth();
 
   return (
 
@@ -59,8 +61,8 @@ const SignUp = () => {
                         try {
                           const response = await axios.post('/api/v1/signup', { username, password });
                           const { token } = response.data;
-                          localStorage.setItem('Token', token);
-                          localStorage.setItem('userName', username);
+                          setToken(token);
+                          setUsername(username);
                           setUniq(true);
                           logIn();
                           navigate('/');

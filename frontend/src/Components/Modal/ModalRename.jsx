@@ -2,10 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './Modal.scss';
 import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { selectors as channelsSelectors } from '../../slices/channelsSlice';
+import { getChannels, getChannelById } from '../../SelectorFunctions';
 
 const ModalRename = (props) => {
   const [valid, setValid] = useState(true);
@@ -16,8 +15,8 @@ const ModalRename = (props) => {
   } = props;
   const firstModalDiv = cn('fade', 'modal-backdrop', { show });
   const secondModalDiv = cn('fade', 'modal', { show });
-  const channels = Object.values(useSelector(channelsSelectors.selectEntities));
-  const currentChannel = useSelector((state) => channelsSelectors.selectById(state, id));
+  const channels = getChannels();
+  const currentChannel = getChannelById(id);
   const names = channels.map((channel) => channel.name);
   const toastSuccess = useCallback(() => toast.success(t('channelRenamed'), { autoClose: 5000 }), [t]);
   const handleSubmit = ({ name }) => {

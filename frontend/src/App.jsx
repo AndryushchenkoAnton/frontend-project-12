@@ -36,7 +36,7 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <RollbarProvider config={process.env['   ROLLBAR_CONFIG ']}>
+      <RollbarProvider config={{accessToken: process.env.ACCESS_TOKEN, environment: process.env.ENVIRONMENT}}>
         <ErrorBoundary>
           <RouterProvider router={route} />
         </ErrorBoundary>

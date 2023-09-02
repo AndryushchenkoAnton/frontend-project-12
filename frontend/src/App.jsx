@@ -12,7 +12,7 @@ import ChatRoute from './Components/ChatRoute/ChatRoute';
 
 const App = () => {
   const rollbarConfig = {
-    environment: 'production',
+    environment: 'testenv',
     accessToken: process.env.ACCES_TOKEN,
   };
 

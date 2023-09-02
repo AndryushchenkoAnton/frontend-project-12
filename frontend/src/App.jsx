@@ -37,12 +37,15 @@ const App = () => {
       element: <SignUp />,
     },
   ]);
-
+  function TestError() {
+    const a = null;
+    return a.hello();
+  } //<RouterProvider router={route} />
   return (
     <AuthProvider>
       <RollbarProvider config={rollbarConfig}>
         <ErrorBoundary>
-          <RouterProvider router={route} />
+          <TestError />
         </ErrorBoundary>
       </RollbarProvider>
     </AuthProvider>

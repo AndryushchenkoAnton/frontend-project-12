@@ -11,9 +11,11 @@ import AuthProvider from './Components/AuthProvider/AuthProvider';
 import ChatRoute from './Components/ChatRoute/ChatRoute';
 
 const App = () => {
+
+
   const rollbarConfig = {
-    environment: 'testenv',
-    accessToken: '8266f58662e741418e2bd7bea392e987',
+    environment: 'production',
+    accessToken: process.env.ACCES_TOKEN,
   };
 
   const route = createBrowserRouter([

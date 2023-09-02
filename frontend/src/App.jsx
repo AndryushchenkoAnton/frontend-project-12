@@ -11,8 +11,6 @@ import AuthProvider from './Components/AuthProvider/AuthProvider';
 import ChatRoute from './Components/ChatRoute/ChatRoute';
 
 const App = () => {
-
-
   const rollbarConfig = {
     environment: 'production',
     accessToken: process.env.ACCES_TOKEN,

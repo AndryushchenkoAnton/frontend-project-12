@@ -9,9 +9,13 @@ import store from './Slices/index.js';
 import SignUp from './RouteComponents/SignUp';
 import AuthProvider from './Components/AuthProvider/AuthProvider';
 import ChatRoute from './Components/ChatRoute/ChatRoute';
-import 'dotenv/config';
 
 const App = () => {
+  const rollbarConfig = {
+    environment: 'testenv',
+    accessToken: '8266f58662e741418e2bd7bea392e987',
+  };
+
   const route = createBrowserRouter([
     {
       path: '/',
@@ -36,7 +40,7 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <RollbarProvider config={{accessToken: process.env.ACCESS_TOKEN, environment: process.env.ENVIRONMENT}}>
+      <RollbarProvider config={rollbarConfig}>
         <ErrorBoundary>
           <RouterProvider router={route} />
         </ErrorBoundary>

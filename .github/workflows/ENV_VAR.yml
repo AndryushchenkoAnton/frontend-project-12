@@ -15,3 +15,4 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
           exclude: HEXLET_ID
+      - run: node -e "console.log(process.env.ROLLBAR_ACCESS_TOKEN)"

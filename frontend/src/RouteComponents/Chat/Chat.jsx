@@ -115,7 +115,6 @@ const Chat = () => {
 
   useEffect(() => {
     getChatData(Token);
-    console.log(process.env.ACCESS_TOKEN);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Token]);
 

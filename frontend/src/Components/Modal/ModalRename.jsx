@@ -4,7 +4,7 @@ import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { getChannels, getChannelById } from '../../SelectorFunctions';
+import { getChannels, getChannelById } from '../../selectors';
 
 const ModalRename = (props) => {
   const [valid, setValid] = useState(true);

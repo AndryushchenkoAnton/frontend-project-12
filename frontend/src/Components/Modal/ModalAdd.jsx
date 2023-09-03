@@ -4,8 +4,8 @@ import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import useAuth from '../../Hooks/index.js';
-import { getChannels } from '../../SelectorFunctions';
+import useAuth from '../../hooks/index.js';
+import { getChannels } from '../../selectors';
 
 const ModalAdd = (props) => {
   const [valid, setValid] = useState(true);

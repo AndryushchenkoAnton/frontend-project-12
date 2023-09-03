@@ -36,5 +36,6 @@ export default {
     networkError: 'Ошибка сети',
     notFoundError: 'Not found !',
     channelManagingTools: 'Управление каналом',
+    hexletLogo: 'Hexlet Chat',
   },
 };

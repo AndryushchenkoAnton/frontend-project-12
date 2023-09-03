@@ -8,21 +8,20 @@ import { useTranslation } from 'react-i18next';
 import { toast, ToastContainer } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { Field, Form, Formik } from 'formik';
-import { actions as channelsActions } from '../../Slices/channelsSlice.js';
-import { actions as messagesActions } from '../../Slices/messagesSlice.js';
+import { actions as channelsActions } from '../../slices/channelsSlice.js';
+import { actions as messagesActions } from '../../slices/messagesSlice.js';
 import './Chat.scss';
 import ModalAdd from '../../Components/Modal/ModalAdd.jsx';
 import ModalDelete from '../../Components/Modal/ModalDelete.jsx';
 import DropDownChannel from '../../Components/Dropdown/DropDown.jsx';
 import ModalRename from '../../Components/Modal/ModalRename';
-import useAuth from '../../Hooks/index.js';
+import useAuth from '../../hooks/index.js';
 import 'react-toastify/dist/ReactToastify.css';
-import { getChannelById, getChannels, getMessages } from '../../SelectorFunctions';
+import { getChannelById, getChannels, getMessages } from '../../selectors';
+import paths from '../../paths';
 
 const Chat = (props) => {
   const dispatch = useDispatch();
-  // const store = useStore();
-  // const { socket } = store.getState().socket;
   const { socket } = props;
   const {
     logStatus, logOut, getUsername, getToken,
@@ -100,7 +99,7 @@ const Chat = (props) => {
 
   const getChatData = async (token) => {
     try {
-      const response = await axios.get('/api/v1/data', {
+      const response = await axios.get(paths.fetchPath, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -183,7 +182,7 @@ const Chat = (props) => {
           <div className="d-flex flex-column h-100">
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
-                <a className="navbar-brand" href="/">Hexlet Chat</a>
+                <a className="navbar-brand" href={paths.defaultPath}>{t('hexletLogo')}</a>
                 {logStatus ? <button type="button" className="btn btn-primary" onClick={() => logOut()}>{t('logOut')}</button> : null}
               </div>
             </nav>

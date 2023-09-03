@@ -3,13 +3,14 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import { io } from 'socket.io-client';
-import LoginForm from './RouteComponents/Login';
-import ErrorPage from './Errors/wrongRoute.js';
-import Chat from './RouteComponents/Chat/Chat.jsx';
-import store from './Slices/index.js';
-import SignUp from './RouteComponents/SignUp';
+import LoginForm from './Pages/Login';
+import ErrorPage from './errors/wrongRoute.js';
+import Chat from './Pages/Chat/Chat.jsx';
+import store from './slices/index.js';
+import SignUp from './Pages/SignUp';
 import AuthProvider from './Components/AuthProvider/AuthProvider';
 import ChatRoute from './Components/ChatRoute/ChatRoute';
+import paths from './paths';
 
 const App = () => {
   const socket = io();
@@ -21,7 +22,7 @@ const App = () => {
 
   const route = createBrowserRouter([
     {
-      path: '/',
+      path: paths.defaultPath,
       element: (
         <ChatRoute>
           <Provider store={store}>
@@ -32,11 +33,11 @@ const App = () => {
       errorElement: <ErrorPage />,
     },
     {
-      path: '/Login',
+      path: paths.logInPath,
       element: <LoginForm />,
     },
     {
-      path: '/signup',
+      path: paths.signUpPath,
       element: <SignUp />,
     },
   ]);

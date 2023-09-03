@@ -8,17 +8,21 @@ import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import { toast, ToastContainer } from 'react-toastify';
 import { Form as ReactForm } from 'react-bootstrap';
-import logInImg from './logIn.jpeg';
+import logInImg from '../../images/logIn.jpeg';
 import 'react-toastify/dist/ReactToastify.css';
-import useAuth from '../../Hooks/index.js';
+import useAuth from '../../hooks/index.js';
+import paths from '../../paths';
 
 const logInSchema = yup.object().shape({
-  username: yup.string().required('Обязательное поле'),
-  password: yup.string().required('Обязательное поле'),
+  username: yup.string()
+    .required('reqField'),
+  password: yup.string()
+    .required('reqField'),
 });
 
 const LoginForm = () => {
   const { t } = useTranslation();
+
   const navigate = useNavigate();
   const {
     logStatus, logIn, logOut, setToken, setUsername,
@@ -31,7 +35,7 @@ const LoginForm = () => {
         <div className="d-flex flex-column h-100">
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
-              <a className="navbar-brand" href="/">Hexlet Chat</a>
+              <a className="navbar-brand" href={paths.defaultPath}>{t('hexletLogo')}</a>
               {logStatus ? <button type="button" className="btn btn-primary" onClick={() => logOut()}>{t('logOut')}</button> : null}
             </div>
           </nav>
@@ -122,7 +126,7 @@ const LoginForm = () => {
                       <span>{t('noAccount')}</span>
                       {' '}
                       <a
-                        href="/signup"
+                        href={paths.signUpPath}
                       >
                         {t('registration')}
                       </a>

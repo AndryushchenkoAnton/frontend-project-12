@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AuthContext from '../../Contexts/index.js';
+import AuthContext from '../../contexts/index.js';
 
 const AuthProvider = ({ children }) => {
   const [logStatus, setLogStatus] = useState(!!localStorage.getItem('Token'));

@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { selectors as messagesSelectors } from '../Slices/messagesSlice.js';
-import { selectors as channelsSelectors } from '../Slices/channelsSlice.js';
+import { selectors as messagesSelectors } from '../slices/messagesSlice.js';
+import { selectors as channelsSelectors } from '../slices/channelsSlice.js';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const getChannelById = (id) => useSelector((state) => channelsSelectors.selectById(state, id));

@@ -13,7 +13,7 @@ import ChatRoute from './Components/ChatRoute/ChatRoute';
 const App = () => {
   const rollbarConfig = {
     environment: 'testenv',
-    accessToken: process.env.ACCES_TOKEN,
+    accessToken: process.env.ACCESS_TOKEN,
   };
 
   const route = createBrowserRouter([
@@ -37,16 +37,10 @@ const App = () => {
       element: <SignUp />,
     },
   ]);
-  function TestError() {
-    console.log(rollbarConfig);
-    const a = null;
-    return a.hello();
-  }
   return (
     <AuthProvider>
       <RollbarProvider config={rollbarConfig}>
         <ErrorBoundary>
-          <TestError />
           <RouterProvider router={route} />
         </ErrorBoundary>
       </RollbarProvider>

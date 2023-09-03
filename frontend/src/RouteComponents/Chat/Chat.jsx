@@ -75,6 +75,7 @@ const Chat = () => {
     dispatch(channelsActions.addChannel(payload));
     if (payload.userName === getUsername()) {
       setNewChannelId(payload.id);
+      console.log(process.env.ROLLBAR_ACCESS_TOKEN)
     }
   });
   socket.on('removeChannel', ({ id }) => {

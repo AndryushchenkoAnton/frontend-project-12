@@ -1,7 +1,7 @@
 import React, {
   useEffect, useState, useRef,
 } from 'react';
-import { useDispatch, useStore } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -19,10 +19,11 @@ import useAuth from '../../Hooks/index.js';
 import 'react-toastify/dist/ReactToastify.css';
 import { getChannelById, getChannels, getMessages } from '../../SelectorFunctions';
 
-const Chat = () => {
+const Chat = (props) => {
   const dispatch = useDispatch();
-  const store = useStore();
-  const { socket } = store.getState().socket;
+  // const store = useStore();
+  // const { socket } = store.getState().socket;
+  const { socket } = props;
   const {
     logStatus, logOut, getUsername, getToken,
   } = useAuth();

@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+import { io } from 'socket.io-client';
 import LoginForm from './RouteComponents/Login';
 import ErrorPage from './Errors/wrongRoute.js';
 import Chat from './RouteComponents/Chat/Chat.jsx';
@@ -11,6 +12,8 @@ import AuthProvider from './Components/AuthProvider/AuthProvider';
 import ChatRoute from './Components/ChatRoute/ChatRoute';
 
 const App = () => {
+  const socket = io();
+
   const rollbarConfig = {
     environment: 'testenv',
     accessToken: process.env.ROLLBAR_TOKEN,
@@ -22,7 +25,7 @@ const App = () => {
       element: (
         <ChatRoute>
           <Provider store={store}>
-            <Chat />
+            <Chat socket={socket} />
           </Provider>
         </ChatRoute>
       ),

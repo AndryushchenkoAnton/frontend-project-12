@@ -13,7 +13,7 @@ import ChatRoute from './Components/ChatRoute/ChatRoute';
 const App = () => {
   const rollbarConfig = {
     environment: 'testenv',
-    accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+    accessToken: process.env.ROLLBAR_TOKEN,
   };
 
   const route = createBrowserRouter([

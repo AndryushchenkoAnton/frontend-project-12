@@ -75,7 +75,6 @@ const Chat = (props) => {
     dispatch(channelsActions.addChannel(payload));
     if (payload.userName === getUsername()) {
       setNewChannelId(payload.id);
-      console.log(process.env.ROLLBAR_TOKEN);
     }
   });
   socket.on('removeChannel', ({ id }) => {
@@ -104,7 +103,6 @@ const Chat = (props) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       const { messages, channels } = response.data;
       dispatch(channelsActions.addChannels(channels));
       dispatch(messagesActions.addMessages(messages));

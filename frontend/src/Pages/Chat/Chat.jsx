@@ -28,7 +28,7 @@ const Chat = (props) => {
   } = useAuth();
   const { t } = useTranslation();
   const messagesStorage = getMessages();
-  const [currentChannelId, setNewChannelId] = useState(1);
+  const [currentChannelId, setNewChannelId] = useState(null);
   const messagesEndRef = useRef(null);
   // Modal
   const [showed, setShow] = useState(false);
@@ -79,9 +79,11 @@ const Chat = (props) => {
   });
   socket.on('removeChannel', ({ id }) => {
     dispatch(channelsActions.removeChannel(id));
-    if (id === currentChannelId) {
-      setNewChannelId(1);
+    if (id !== currentChannelId) {
+      setNewChannelId(currentChannelId);
+      return;
     }
+    setNewChannelId(1);
   });
   socket.on('renameChannel', (payload) => {
     dispatch(channelsActions.renameChannel({ id: payload.id, changes: payload }));
@@ -103,7 +105,9 @@ const Chat = (props) => {
           Authorization: `Bearer ${token}`,
         },
       });
+
       const { messages, channels } = response.data;
+      setNewChannelId(1);
       dispatch(channelsActions.addChannels(channels));
       dispatch(messagesActions.addMessages(messages));
     } catch (e) {

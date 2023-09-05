@@ -38,7 +38,6 @@ const Chat = (props) => {
   const [modalDelete, setModalDelete] = useState(false);
   const [modalRename, setModalRename] = useState(false);
   const [modalChId, setChId] = useState(null);
-  const ch = getCurrentChannel();
 
   /*  const showAdd = () => {
     setModalAdd(true);
@@ -64,29 +63,7 @@ const Chat = (props) => {
   // Modal
 
   // socket.on
-  socket.on('newMessage', (payload) => {
-    dispatch(messagesActions.addMessage(payload));
-  });
-  socket.on('newChannel', (payload) => {
-    dispatch(channelsActions.addChannel(payload));
-    if (payload.userName === getUsername()) {
-      // setNewChannelId(payload.id);
-      dispatch(channelsActions.changeCurrentChannel(payload.id));
-    }
-  });
-  socket.on('removeChannel', ({ id }) => {
-    dispatch(channelsActions.removeChannel(id));
-    if (id !== currentChannel) {
-      // setNewChannelId(currentChannelId);
-      dispatch(channelsActions.changeCurrentChannel(currentChannel));
-      return;
-    }
-    dispatch(channelsActions.changeCurrentChannel(id));
-    // setNewChannelId(1);
-  });
-  socket.on('renameChannel', (payload) => {
-    dispatch(channelsActions.renameChannel({ id: payload.id, changes: payload }));
-  });
+
   // socket.on
 
   const Token = getToken();
@@ -166,12 +143,10 @@ const Chat = (props) => {
     if (modalDelete || modalAdd || modalRename) {
       document.body.classList.add('modal-open');
       document.body.setAttribute('data-rr-ui-modal-open', 'true');
-      console.log(ch);
       return;
     }
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open');
-    console.log(ch);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalAdd, modalDelete, modalRename]);
   useEffect(() => {

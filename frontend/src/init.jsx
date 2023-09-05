@@ -4,6 +4,7 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
 import resources from './locales/index.js';
 import App from './App.jsx';
+import AuthProvider from './Components/AuthProvider/AuthProvider';
 
 const localeInit = async () => {
   const i18n = i18next.createInstance();
@@ -24,7 +25,9 @@ const localeInit = async () => {
 
   return (
     <I18nextProvider i18n={i18n}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </I18nextProvider>
   );
 };

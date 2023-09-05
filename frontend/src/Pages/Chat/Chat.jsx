@@ -18,7 +18,7 @@ import ModalRename from '../../Components/Modal/ModalRename';
 import useAuth from '../../hooks/index.js';
 import 'react-toastify/dist/ReactToastify.css';
 import {
-  getChannelById, getChannels, getMessages, getCurrentChannel,
+  getChannelById, getChannels, getMessages, getCurrentChannel, getModalChId,
 } from '../../selectors';
 import paths from '../../paths';
 
@@ -30,31 +30,21 @@ const Chat = (props) => {
   } = useAuth();
   const { t } = useTranslation();
   const messagesStorage = getMessages();
-  // const [currentChannelId, setNewChannelId] = useState(null);
-  const currentChannel = getCurrentChannel();
   const messagesEndRef = useRef(null);
+  const actionChannelId = getModalChId();
   // Modal
   const [modalAdd, setModalAdd] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
   const [modalRename, setModalRename] = useState(false);
-  const [modalChId, setChId] = useState(null);
-
-  /*  const showAdd = () => {
-    setModalAdd(true);
-  };
-  const closeAdd = () => {
-    setModalAdd(false);
-  }; */
-
   const showDelete = () => {
     setModalDelete(true);
   };
   const closeDelete = () => {
-    setChId(null);
+    dispatch(channelsActions.changeActionChannelId(null));
     setModalDelete(false);
   };
   const closeRename = () => {
-    setChId(null);
+    dispatch(channelsActions.changeActionChannelId(null));
     setModalRename(false);
   };
   const showRename = () => {
@@ -62,17 +52,13 @@ const Chat = (props) => {
   };
   // Modal
 
-  // socket.on
-
-  // socket.on
-
   const Token = getToken();
   const channelsStorage = getChannels();
+  const currentChannel = getCurrentChannel();
 
   const changeChannelHandler = (id) => () => {
     const newCurrentChannel = channelsStorage.find((channel) => channel.id === id);
     dispatch(channelsActions.changeCurrentChannel(newCurrentChannel.id));
-    // setNewChannelId(newCurrentChannel.id);
   };
 
   const getChatData = async (token) => {
@@ -84,7 +70,6 @@ const Chat = (props) => {
       });
 
       const { messages, channels, currentChannelId } = response.data;
-      // setNewChannelId(1);
       dispatch(channelsActions.changeCurrentChannel(currentChannelId));
       dispatch(channelsActions.addChannels(channels));
       dispatch(messagesActions.addMessages(messages));
@@ -97,7 +82,7 @@ const Chat = (props) => {
   useEffect(() => {
     getChatData(Token);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Token]);
+  }, [dispatch]);
 
   const renderedChannels = channelsStorage.map((channel) => {
     const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', { 'btn-secondary': currentChannel === channel.id });
@@ -120,7 +105,6 @@ const Chat = (props) => {
         currentChannelId={currentChannel}
         handleClick={changeChannelHandler(channel.id)}
         handleDeleteClick={showDelete}
-        handleChIdToAction={setChId}
         handleRenameClick={showRename}
       />
     );
@@ -202,7 +186,7 @@ const Chat = (props) => {
                         initialValues={{ body: '' }}
                         onSubmit={(values, { resetForm }) => {
                           const name = getUsername();
-                          socket.emit('newMessage', { body: values.body, channelId: currentChannel, username: name }, (response) => console.log(response));
+                          socket.emit('newMessage', { body: values.body, channelId: currentChannel, username: name });
                           resetForm({ values: '' });
                         }}
                       >
@@ -246,7 +230,7 @@ const Chat = (props) => {
           <ModalDelete
             show={modalDelete}
             closeHandler={closeDelete}
-            idToDelete={modalChId}
+            idToDelete={actionChannelId}
             socket={socket}
           />
         )
@@ -262,7 +246,7 @@ const Chat = (props) => {
         ? (
           <ModalRename
             show={modalRename}
-            id={modalChId}
+            id={actionChannelId}
             handleClose={closeRename}
             socket={socket}
           />

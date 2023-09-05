@@ -60,7 +60,7 @@ const SignUp = () => {
                         const { username, password } = values;
                         try {
                           const response = await axios.post(
-                            paths.signUpPath,
+                            paths.signupDataPath,
                             { username, password },
                           );
                           const { token } = response.data;

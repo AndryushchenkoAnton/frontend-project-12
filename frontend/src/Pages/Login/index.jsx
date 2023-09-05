@@ -60,14 +60,14 @@ const LoginForm = () => {
                       onSubmit={async ({ username, password }) => {
                         try {
                           const response = await axios.post(
-                            paths.fetchPath,
+                            paths.loginDataPath,
                             { username, password },
                           );
                           setToken(response.data.token);
                           setUsername(username);
                           logIn();
                           setUniqUser(true);
-                          navigate('/');
+                          navigate(paths.defaultPath);
                         } catch (e) {
                           logOut();
                           if (e.response.status === 401) {

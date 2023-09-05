@@ -37,5 +37,6 @@ export default {
     notFoundError: 'Not found !',
     channelManagingTools: 'Управление каналом',
     hexletLogo: 'Hexlet Chat',
+    channels: 'Каналы',
   },
 };

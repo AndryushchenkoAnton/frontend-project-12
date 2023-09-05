@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import './Modal.scss';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';

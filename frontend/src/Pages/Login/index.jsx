@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Login.scss';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
@@ -60,7 +59,10 @@ const LoginForm = () => {
                       validateOnBlur={false}
                       onSubmit={async ({ username, password }) => {
                         try {
-                          const response = await axios.post('/api/v1/login', { username, password });
+                          const response = await axios.post(
+                            paths.fetchPath,
+                            { username, password },
+                          );
                           setToken(response.data.token);
                           setUsername(username);
                           logIn();
@@ -79,7 +81,7 @@ const LoginForm = () => {
                     >
                       {({ values, handleChange, errors }) => (
                         <Form className="col-12 col-md-6 mt-3 mt-mb-0">
-                          <h1 className="text-center mb-4">Войти</h1>
+                          <h1 className="text-center mb-4">{t('logIn')}</h1>
                           <div className="form-floating mb-3">
                             <Field
                               autoFocus
@@ -144,5 +146,3 @@ const LoginForm = () => {
   );
 };
 export default LoginForm;
-
-// <div className="invalid-tooltip">{t('wrongPasswordOrUsername')}</div>

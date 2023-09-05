@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './index.scss';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import * as yup from 'yup';
@@ -60,7 +59,10 @@ const SignUp = () => {
                       onSubmit={async (values) => {
                         const { username, password } = values;
                         try {
-                          const response = await axios.post('/api/v1/signup', { username, password });
+                          const response = await axios.post(
+                            paths.signUpPath,
+                            { username, password },
+                          );
                           const { token } = response.data;
                           setToken(token);
                           setUsername(username);

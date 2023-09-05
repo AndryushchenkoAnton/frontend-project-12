@@ -13,6 +13,7 @@ import paths from './paths';
 import { actions as messagesActions } from './slices/messagesSlice';
 import { actions as channelsActions } from './slices/channelsSlice';
 import useAuth from './hooks';
+import './App.scss';
 
 const App = () => {
   const socket = io();
@@ -67,13 +68,11 @@ const App = () => {
     },
   ]);
   return (
-  // <AuthProvider>
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <RouterProvider router={route} />
       </ErrorBoundary>
     </RollbarProvider>
-  // </AuthProvider>
   );
 };
 

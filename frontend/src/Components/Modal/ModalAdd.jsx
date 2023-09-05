@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import './Modal.scss';
 import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';

@@ -78,7 +78,7 @@ const Chat = (props) => {
     dispatch(channelsActions.removeChannel(id));
     if (id !== currentChannel) {
       // setNewChannelId(currentChannelId);
-      dispatch(channelsActions.changeCurrentChannel(currentChannel))
+      dispatch(channelsActions.changeCurrentChannel(currentChannel));
       return;
     }
     dispatch(channelsActions.changeCurrentChannel(id));

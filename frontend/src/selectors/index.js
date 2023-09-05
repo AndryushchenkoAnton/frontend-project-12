@@ -8,5 +8,9 @@ const getChannelById = (id) => useSelector((state) => channelsSelectors.selectBy
 const getMessages = () => Object.values(useSelector(messagesSelectors.selectEntities));
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const getChannels = () => Object.values(useSelector(channelsSelectors.selectEntities));
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const getCurrentChannel = () => useSelector((state) => state.channels.currentChannel);
 
-export { getChannels, getChannelById, getMessages };
+export {
+  getChannels, getChannelById, getMessages, getCurrentChannel,
+};

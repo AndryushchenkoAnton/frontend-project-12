@@ -17,7 +17,9 @@ import DropDownChannel from '../../Components/Dropdown/DropDown.jsx';
 import ModalRename from '../../Components/Modal/ModalRename';
 import useAuth from '../../hooks/index.js';
 import 'react-toastify/dist/ReactToastify.css';
-import { getChannelById, getChannels, getMessages } from '../../selectors';
+import {
+  getChannelById, getChannels, getMessages, getCurrentChannel,
+} from '../../selectors';
 import paths from '../../paths';
 
 const Chat = (props) => {
@@ -28,41 +30,35 @@ const Chat = (props) => {
   } = useAuth();
   const { t } = useTranslation();
   const messagesStorage = getMessages();
-  const [currentChannelId, setNewChannelId] = useState(null);
+  // const [currentChannelId, setNewChannelId] = useState(null);
+  const currentChannel = getCurrentChannel();
   const messagesEndRef = useRef(null);
   // Modal
-  // const [showed, setShow] = useState(false);
-  // const show = () => setShow(true);
-  // const close = () => setShow(false);
   const [modalAdd, setModalAdd] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
+  const [modalRename, setModalRename] = useState(false);
+  const [modalChId, setChId] = useState(null);
+  const ch = getCurrentChannel();
 
-  const showAdd = () => {
-    // show();
+  /*  const showAdd = () => {
     setModalAdd(true);
   };
   const closeAdd = () => {
-    // close();
     setModalAdd(false);
-  };
-  const [modalChId, setChId] = useState(null);
-  const [modalDelete, setModalDelete] = useState(false);
+  }; */
+
   const showDelete = () => {
-    // show();
     setModalDelete(true);
   };
   const closeDelete = () => {
-    // close();
     setChId(null);
     setModalDelete(false);
   };
-  const [modalRename, setModalRename] = useState(false);
   const closeRename = () => {
-    // close();
     setChId(null);
     setModalRename(false);
   };
   const showRename = () => {
-    // show();
     setModalRename(true);
   };
   // Modal
@@ -74,16 +70,18 @@ const Chat = (props) => {
   socket.on('newChannel', (payload) => {
     dispatch(channelsActions.addChannel(payload));
     if (payload.userName === getUsername()) {
-      setNewChannelId(payload.id);
+      // setNewChannelId(payload.id);
+      dispatch(channelsActions.changeCurrentChannel(payload.id));
     }
   });
   socket.on('removeChannel', ({ id }) => {
     dispatch(channelsActions.removeChannel(id));
-    if (id !== currentChannelId) {
-      setNewChannelId(currentChannelId);
+    if (id !== currentChannel) {
+      // setNewChannelId(currentChannelId);
       return;
     }
-    setNewChannelId(1);
+    dispatch(channelsActions.changeCurrentChannel(id));
+    // setNewChannelId(1);
   });
   socket.on('renameChannel', (payload) => {
     dispatch(channelsActions.renameChannel({ id: payload.id, changes: payload }));
@@ -95,7 +93,8 @@ const Chat = (props) => {
 
   const changeChannelHandler = (id) => () => {
     const newCurrentChannel = channelsStorage.find((channel) => channel.id === id);
-    setNewChannelId(newCurrentChannel.id);
+    dispatch(channelsActions.changeCurrentChannel(newCurrentChannel.id));
+    // setNewChannelId(newCurrentChannel.id);
   };
 
   const getChatData = async (token) => {
@@ -106,8 +105,9 @@ const Chat = (props) => {
         },
       });
 
-      const { messages, channels } = response.data;
-      setNewChannelId(1);
+      const { messages, channels, currentChannelId } = response.data;
+      // setNewChannelId(1);
+      dispatch(channelsActions.changeCurrentChannel(currentChannelId));
       dispatch(channelsActions.addChannels(channels));
       dispatch(messagesActions.addMessages(messages));
     } catch (e) {
@@ -122,7 +122,7 @@ const Chat = (props) => {
   }, [Token]);
 
   const renderedChannels = channelsStorage.map((channel) => {
-    const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', { 'btn-secondary': currentChannelId === channel.id });
+    const classNameLi = cn('w-100', 'rounded-0', 'text-start', 'btn', { 'btn-secondary': currentChannel === channel.id });
     if (!channel.removable) {
       return (
         <li key={channel.id} className="nav-item w-100">
@@ -139,7 +139,7 @@ const Chat = (props) => {
         name={channel.name}
         id={channel.id}
         key={channel.id}
-        currentChannelId={currentChannelId}
+        currentChannelId={currentChannel}
         handleClick={changeChannelHandler(channel.id)}
         handleDeleteClick={showDelete}
         handleChIdToAction={setChId}
@@ -148,8 +148,8 @@ const Chat = (props) => {
     );
   });
 
-  const renderedMessages = getMessages()
-    .filter((message) => message.channelId === currentChannelId)
+  const renderedMessages = messagesStorage// getMessages()
+    .filter((message) => message.channelId === currentChannel)
     .map((message) => {
       const { body, username } = message;
       return (
@@ -165,17 +165,19 @@ const Chat = (props) => {
     if (modalDelete || modalAdd || modalRename) {
       document.body.classList.add('modal-open');
       document.body.setAttribute('data-rr-ui-modal-open', 'true');
+      console.log(ch);
       return;
     }
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open');
+    console.log(ch);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalAdd, modalDelete, modalRename]);
   useEffect(() => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   }, [renderedMessages]);
 
-  const channel = getChannelById(currentChannelId);
+  const channel = getChannelById(currentChannel);
 
   return (
     <>
@@ -193,7 +195,7 @@ const Chat = (props) => {
                 <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
                   <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
                     <b>Каналы</b>
-                    <button type="button" className="p-0 text-primary btn btn-group-vertical" onClick={showAdd}>
+                    <button type="button" className="p-0 text-primary btn btn-group-vertical" onClick={() => setModalAdd(true)}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
                         <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -214,7 +216,7 @@ const Chat = (props) => {
                           { channel ? channel.name : 'general'}
                         </b>
                       </p>
-                      <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannelId).length })}</span>
+                      <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannel).length })}</span>
                     </div>
                     <div id="messages-box" className="chat-messages overflow-auto px-5 " ref={messagesEndRef}>
                       {renderedMessages}
@@ -224,7 +226,7 @@ const Chat = (props) => {
                         initialValues={{ body: '' }}
                         onSubmit={(values, { resetForm }) => {
                           const name = getUsername();
-                          socket.emit('newMessage', { body: values.body, channelId: currentChannelId, username: name }, (response) => console.log(response));
+                          socket.emit('newMessage', { body: values.body, channelId: currentChannel, username: name }, (response) => console.log(response));
                           resetForm({ values: '' });
                         }}
                       >
@@ -276,7 +278,7 @@ const Chat = (props) => {
       {modalAdd ? (
         <ModalAdd
           show={modalAdd}
-          handleClose={() => closeAdd()}
+          handleClose={() => setModalAdd(false)}
           socket={socket}
         />
       ) : null}

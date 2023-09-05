@@ -31,38 +31,38 @@ const Chat = (props) => {
   const [currentChannelId, setNewChannelId] = useState(null);
   const messagesEndRef = useRef(null);
   // Modal
-  const [showed, setShow] = useState(false);
-  const show = () => setShow(true);
-  const close = () => setShow(false);
+  // const [showed, setShow] = useState(false);
+  // const show = () => setShow(true);
+  // const close = () => setShow(false);
   const [modalAdd, setModalAdd] = useState(false);
 
   const showAdd = () => {
-    show();
+    // show();
     setModalAdd(true);
   };
   const closeAdd = () => {
-    close();
+    // close();
     setModalAdd(false);
   };
   const [modalChId, setChId] = useState(null);
   const [modalDelete, setModalDelete] = useState(false);
   const showDelete = () => {
-    show();
+    // show();
     setModalDelete(true);
   };
   const closeDelete = () => {
-    close();
+    // close();
     setChId(null);
     setModalDelete(false);
   };
   const [modalRename, setModalRename] = useState(false);
   const closeRename = () => {
-    close();
+    // close();
     setChId(null);
     setModalRename(false);
   };
   const showRename = () => {
-    show();
+    // show();
     setModalRename(true);
   };
   // Modal
@@ -162,7 +162,7 @@ const Chat = (props) => {
     });
 
   useEffect(() => {
-    if (showed) {
+    if (modalDelete || modalAdd || modalRename) {
       document.body.classList.add('modal-open');
       document.body.setAttribute('data-rr-ui-modal-open', 'true');
       return;
@@ -170,7 +170,7 @@ const Chat = (props) => {
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentChannelId, showed]);
+  }, [modalAdd, modalDelete, modalRename]);
   useEffect(() => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   }, [renderedMessages]);
@@ -275,7 +275,7 @@ const Chat = (props) => {
         : null}
       {modalAdd ? (
         <ModalAdd
-          show={modalAdd && showed}
+          show={modalAdd}
           handleClose={() => closeAdd()}
           socket={socket}
         />
@@ -283,7 +283,7 @@ const Chat = (props) => {
       {modalRename
         ? (
           <ModalRename
-            show={showed}
+            show={modalRename}
             id={modalChId}
             handleClose={closeRename}
             socket={socket}

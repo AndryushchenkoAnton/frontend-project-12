@@ -69,6 +69,7 @@ const LoginForm = () => {
                           setUniqUser(true);
                           navigate(paths.defaultPath);
                         } catch (e) {
+                          console.log(logStatus)
                           logOut();
                           if (e.response.status === 401) {
                             setUniqUser(false);

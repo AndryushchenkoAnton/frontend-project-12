@@ -5,15 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
-import { getChannels, getChannelById } from '../../selectors';
+import { getChannels, getChannelById, getModalChId } from '../../selectors';
 import { actions as modalActions } from '../../slices/modalSlice';
-import { useSocket } from "../../hooks";
+import { useSocket } from '../../hooks';
 
-const ModalRename = (props) => {
+const ModalRename = () => {
   const { t } = useTranslation();
-  const {
-    id,
-  } = props;
+  const id = getModalChId();
   const dispatch = useDispatch();
   const handleClose = () => {
     dispatch(modalActions.closeModal());

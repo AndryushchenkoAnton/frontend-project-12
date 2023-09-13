@@ -22,9 +22,8 @@ import {
 } from '../../selectors';
 import paths from '../../paths';
 
-const Chat = (props) => {
+const Chat = () => {
   const dispatch = useDispatch();
-  const { socket } = props;
   const {
     logStatus, logOut, getUsername, getToken,
   } = useAuth();
@@ -228,22 +227,16 @@ const Chat = (props) => {
       </div>
       {activeModal === 'modalDelete'
         ? (
-          <ModalDelete
-            idToDelete={actionChannelId}
-            socket={socket}
-          />
+          <ModalDelete />
         )
         : null}
       {activeModal === 'modalAdd' ? (
-        <ModalAdd
-          socket={socket}
-        />
+        <ModalAdd />
       ) : null}
       {activeModal === 'modalRename'
         ? (
           <ModalRename
             id={actionChannelId}
-            socket={socket}
           />
         )
         : null}

@@ -53,7 +53,7 @@ const App = () => {
       element: (
         <ChatRoute>
           <Provider store={store}>
-            <Chat socket={socket} />
+            <Chat />
           </Provider>
         </ChatRoute>
       ),

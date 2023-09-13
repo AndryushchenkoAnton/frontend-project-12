@@ -9,13 +9,10 @@ import { useAuth, useSocket } from '../../hooks';
 import { getChannels } from '../../selectors';
 import { actions as modalActions } from '../../slices/modalSlice.js';
 
-const ModalAdd = (props) => {
+const ModalAdd = () => {
   const { t } = useTranslation();
   const { getUsername } = useAuth();
   const dispatch = useDispatch();
-  const {
-    socket,
-  } = props;
   const { emitNewChannel } = useSocket();
   const firstModalDiv = cn('fade', 'modal-backdrop', 'show');
   const secondModalDiv = cn('fade', 'modal', 'show');
@@ -54,7 +51,7 @@ const ModalAdd = (props) => {
                 validateOnBlur={false}
                 onSubmit={async ({ name }) => {
                   try {
-                    emitNewChannel(name, getUsername())
+                    emitNewChannel(name, getUsername());
                     handleClose();
                     toast.success(t('channelAdded'), { autoClose: 5000 });
                   } catch (e) {

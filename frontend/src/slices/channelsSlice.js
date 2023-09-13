@@ -1,7 +1,9 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { actions as modalActions } from './modalSlice.js';
 
 const channelsAdapter = createEntityAdapter();
 const initialState = channelsAdapter.getInitialState({ currentChannel: 1, actionChannelId: null });
+const { closeModal } = modalActions;
 
 const channelsSlice = createSlice({
   name: 'channelsSlice',
@@ -20,6 +22,12 @@ const channelsSlice = createSlice({
       // eslint-disable-next-line no-param-reassign
       state.actionChannelId = payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(closeModal, (state) => {
+      // eslint-disable-next-line no-param-reassign
+      state.actionChannelId = null;
+    });
   },
 });
 

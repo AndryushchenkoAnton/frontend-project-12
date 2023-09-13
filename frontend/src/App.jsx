@@ -3,6 +3,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import { io } from 'socket.io-client';
+import SocketProvider from './Components/SocketProvider/SocketProvider';
 import LoginForm from './Pages/Login';
 import ErrorPage from './errors/wrongRoute.js';
 import Chat from './Pages/Chat/Chat.jsx';
@@ -12,7 +13,7 @@ import ChatRoute from './Components/ChatRoute/ChatRoute';
 import paths from './paths';
 import { actions as messagesActions } from './slices/messagesSlice';
 import { actions as channelsActions } from './slices/channelsSlice';
-import useAuth from './hooks';
+import { useAuth } from './hooks';
 import './App.scss';
 
 const App = () => {
@@ -70,7 +71,9 @@ const App = () => {
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
-        <RouterProvider router={route} />
+        <SocketProvider socket={socket}>
+          <RouterProvider router={route} />
+        </SocketProvider>
       </ErrorBoundary>
     </RollbarProvider>
   );

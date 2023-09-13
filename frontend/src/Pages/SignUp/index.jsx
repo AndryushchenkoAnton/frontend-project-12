@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import * as yup from 'yup';
 import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import useAuth from '../../hooks/index.js';
+import { toast, ToastContainer } from 'react-toastify';
+import { useAuth } from '../../hooks';
 import signUpImg from '../../images/signUp.jpg';
 import paths from '../../paths';
 
@@ -25,9 +26,8 @@ const signUpSchema = yup.object().shape({
 const SignUp = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [uniq, setUniq] = useState(true);
   const {
-    logStatus, logIn, logOut, setUsername, setToken,
+    logStatus, logIn, logOut,
   } = useAuth();
 
   return (
@@ -64,13 +64,14 @@ const SignUp = () => {
                             { username, password },
                           );
                           const { token } = response.data;
-                          setToken(token);
-                          setUsername(username);
-                          setUniq(true);
-                          logIn();
-                          navigate('/');
+                          logIn(username, token);
+                          navigate(paths.defaultPath);
                         } catch (e) {
-                          setUniq(false);
+                          if (e.response.status === 409) {
+                            toast(t('userAlreadyExh'));
+                            return;
+                          }
+                          toast(t('networkError'));
                         }
                       }}
                     >
@@ -84,7 +85,7 @@ const SignUp = () => {
                               autoComplete="username"
                               required
                               id="username"
-                              className={cn('form-control', { 'is-invalid': errors.username || !uniq })}
+                              className={cn('form-control', { 'is-invalid': errors.username })}
                               value={values.username}
                               onChange={handleChange}
                             />
@@ -105,7 +106,7 @@ const SignUp = () => {
                               autoComplete="new-password"
                               type="password"
                               id="password"
-                              className={cn('form-control', { 'is-invalid': errors.password || !uniq })}
+                              className={cn('form-control', { 'is-invalid': errors.password })}
                               value={values.password}
                               onChange={handleChange}
                             />
@@ -124,11 +125,11 @@ const SignUp = () => {
                               autoComplete="new-password"
                               type="password"
                               id="confirmPassword"
-                              className={cn('form-control', { 'is-invalid': errors.confirmPassword || !uniq })}
+                              className={cn('form-control', { 'is-invalid': errors.confirmPassword })}
                               value={values.confirmPassword}
                               onChange={handleChange}
                             />
-                            <div className="invalid-tooltip">{!uniq ? t('userAlreadyExh') : t(errors.confirmPassword)}</div>
+                            <div className="invalid-tooltip">{t(errors.confirmPassword)}</div>
                             <label className="form-label" htmlFor="confirmPassword">{t('confirmPasswordAction')}</label>
                           </div>
                           <button type="submit" className="w-100 btn btn-outline-primary">{t('register')}</button>
@@ -141,7 +142,7 @@ const SignUp = () => {
             </div>
           </div>
         </div>
-        <div className="Toastify" />
+        <ToastContainer />
       </div>
     </div>
 

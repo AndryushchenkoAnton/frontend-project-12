@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Formik, Form, Field } from 'formik';
+import React from 'react';
+import {
+  Formik, Form, Field,
+} from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { Form as ReactForm } from 'react-bootstrap';
 import logInImg from '../../images/logIn.jpeg';
 import 'react-toastify/dist/ReactToastify.css';
-import useAuth from '../../hooks/index.js';
+import { useAuth } from '../../hooks';
 import paths from '../../paths';
 
 const logInSchema = yup.object().shape({
@@ -21,12 +23,10 @@ const logInSchema = yup.object().shape({
 
 const LoginForm = () => {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
   const {
-    logStatus, logIn, logOut, setToken, setUsername,
+    logStatus, logIn, logOut,
   } = useAuth();
-  const [uniqUser, setUniqUser] = useState(true);
   return (
 
     <div className="h-100">
@@ -57,30 +57,29 @@ const LoginForm = () => {
                       validationSchema={logInSchema}
                       validateOnChange={false}
                       validateOnBlur={false}
-                      onSubmit={async ({ username, password }) => {
+                      onSubmit={async ({ username, password }, actions) => {
+                        actions.setStatus(undefined);
                         try {
                           const response = await axios.post(
                             paths.loginDataPath,
                             { username, password },
                           );
-                          setToken(response.data.token);
-                          setUsername(username);
-                          logIn();
-                          setUniqUser(true);
+                          logIn(username, response.data.token);
                           navigate(paths.defaultPath);
                         } catch (e) {
-                          console.log(logStatus);
-                          logOut();
                           if (e.response.status === 401) {
-                            setUniqUser(false);
+                            actions.setStatus({ username: 'login error' });
+                            logOut();
                             return;
                           }
-                          setUniqUser(false);
+                          logOut();
                           toast(t('networkError'));
                         }
                       }}
                     >
-                      {({ values, handleChange, errors }) => (
+                      {({
+                        values, handleChange, errors, status,
+                      }) => (
                         <Form className="col-12 col-md-6 mt-3 mt-mb-0">
                           <h1 className="text-center mb-4">{t('logIn')}</h1>
                           <div className="form-floating mb-3">
@@ -88,13 +87,12 @@ const LoginForm = () => {
                               autoFocus
                               name="username"
                               placeholder={t('yourNick')}
-                              className={cn('form-control', { 'is-invalid': errors.username || !uniqUser })}
+                              className={cn('form-control', { 'is-invalid': errors.username || status })}
                               id="username"
                               autocomplete="username"
                               required
                               value={values.username}
                               onChange={handleChange}
-
                             />
                             <label htmlFor="username">{t('yourNick')}</label>
                           </div>
@@ -106,18 +104,18 @@ const LoginForm = () => {
                               placeholder="Пароль"
                               type="password"
                               id="password"
-                              className={cn('form-control', { 'is-invalid': errors.username || !uniqUser })}
+                              className={cn('form-control', { 'is-invalid': errors.username || status })}
                               value={values.password}
                               onChange={handleChange}
                             />
                             <label htmlFor="password" className="form-label">{t('password')}</label>
-                            {uniqUser ? null : (
+                            {status && status.username ? (
                               <ReactForm.Control.Feedback
                                 type="invalid"
                               >
                                 {t('wrongPasswordOrUsername')}
                               </ReactForm.Control.Feedback>
-                            )}
+                            ) : null}
                           </div>
                           <button type="submit" className="w-100 mb-3 btn btn-outline-primary">{t('logIn')}</button>
                         </Form>

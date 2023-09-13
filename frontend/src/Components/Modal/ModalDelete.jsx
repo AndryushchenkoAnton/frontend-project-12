@@ -1,20 +1,25 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { actions as modalActions } from '../../slices/modalSlice';
+import { useSocket } from "../../hooks";
 
 const ModalDelete = (props) => {
   const {
-    show, closeHandler, idToDelete, socket,
+    idToDelete,
   } = props;
-  const fadeClass = cn('fade', 'modal-backdrop', { show });
-  const dialogClass = cn('fade', 'modal', { show });
+  const dispatch = useDispatch();
+  const fadeClass = cn('fade', 'modal-backdrop', 'show');
+  const dialogClass = cn('fade', 'modal', 'show');
   const { t } = useTranslation();
-  const toastSuccess = useCallback(() => toast.success(t('channelDeleted'), { autoClose: 5000 }), [t]);
+  const { emitDeleteChannel } = useSocket();
+  const handleClose = () => dispatch(modalActions.closeModal());
   const deleteHandler = (id) => () => {
-    socket.emit('removeChannel', { id });
-    toastSuccess();
-    closeHandler();
+    emitDeleteChannel(id);
+    toast.success(t('channelDeleted'), { autoClose: 5000 });
+    handleClose();
   };
 
   return (
@@ -22,7 +27,7 @@ const ModalDelete = (props) => {
       <div className={fadeClass} />
       <div
         role="dialog"
-        aria-modal={show}
+        aria-modal="true"
         className={dialogClass}
         tabIndex="-1"
         style={{ 'padding-left': '22px', display: 'block' }}
@@ -34,7 +39,7 @@ const ModalDelete = (props) => {
               <button
                 type="button"
                 aria-label="Close"
-                onClick={closeHandler}
+                onClick={handleClose}
                 data-bs-dismiss="modal"
                 className="btn btn-close"
               />
@@ -42,7 +47,7 @@ const ModalDelete = (props) => {
             <div className="modal-body">
               <p className="lead">{t('deleteConfirmation')}</p>
               <div className="d-flex justify-content-end">
-                <button type="button" className="me-2 btn btn-secondary" onClick={closeHandler}>{t('cancel')}</button>
+                <button type="button" className="me-2 btn btn-secondary" onClick={handleClose}>{t('cancel')}</button>
                 <button type="button" className="btn btn-danger" onClick={deleteHandler(idToDelete)}>{t('deleteAction')}</button>
               </div>
             </div>

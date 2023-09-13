@@ -38,5 +38,6 @@ export default {
     channelManagingTools: 'Управление каналом',
     hexletLogo: 'Hexlet Chat',
     channels: 'Каналы',
+    oldToken: 'Попробуйте еще раз',
   },
 };

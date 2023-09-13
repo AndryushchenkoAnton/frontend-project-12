@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AuthContext from '../../contexts/index.js';
+import AuthContext from '../../contexts/authContext.js';
 
 const AuthProvider = ({ children }) => {
   const [logStatus, setLogStatus] = useState(!!localStorage.getItem('Token'));
@@ -16,7 +16,9 @@ const AuthProvider = ({ children }) => {
 
   const getUsername = () => localStorage.getItem('userName');
 
-  const logIn = () => {
+  const logIn = (username, token) => {
+    setToken(token);
+    setUsername(username);
     setLogStatus(true);
   };
 

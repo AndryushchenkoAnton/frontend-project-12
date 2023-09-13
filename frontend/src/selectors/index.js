@@ -12,7 +12,9 @@ const getChannels = () => Object.values(useSelector(channelsSelectors.selectEnti
 const getCurrentChannel = () => useSelector((state) => state.channels.currentChannel);
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const getModalChId = () => useSelector((state) => state.channels.actionChannelId);
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const getActiveModal = () => useSelector((state) => state.modal.activeModal);
 
 export {
-  getChannels, getChannelById, getMessages, getCurrentChannel, getModalChId,
+  getChannels, getChannelById, getMessages, getCurrentChannel, getModalChId, getActiveModal,
 };

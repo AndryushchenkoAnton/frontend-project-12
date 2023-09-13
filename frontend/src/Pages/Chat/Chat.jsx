@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, useRef,
+  useEffect, useRef,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -10,14 +10,15 @@ import leoProfanity from 'leo-profanity';
 import { Field, Form, Formik } from 'formik';
 import { actions as channelsActions } from '../../slices/channelsSlice.js';
 import { actions as messagesActions } from '../../slices/messagesSlice.js';
+import { actions as modalActions } from '../../slices/modalSlice.js';
 import ModalAdd from '../../Components/Modal/ModalAdd.jsx';
 import ModalDelete from '../../Components/Modal/ModalDelete.jsx';
 import DropDownChannel from '../../Components/Dropdown/DropDown.jsx';
 import ModalRename from '../../Components/Modal/ModalRename';
-import useAuth from '../../hooks/index.js';
+import { useAuth, useSocket } from '../../hooks';
 import 'react-toastify/dist/ReactToastify.css';
 import {
-  getChannelById, getChannels, getMessages, getCurrentChannel, getModalChId,
+  getChannelById, getChannels, getMessages, getCurrentChannel, getModalChId, getActiveModal,
 } from '../../selectors';
 import paths from '../../paths';
 
@@ -27,27 +28,21 @@ const Chat = (props) => {
   const {
     logStatus, logOut, getUsername, getToken,
   } = useAuth();
+  const { emitMessage } = useSocket();
   const { t } = useTranslation();
   const messagesStorage = getMessages();
   const messagesEndRef = useRef(null);
   const actionChannelId = getModalChId();
   // Modal
-  const [modalAdd, setModalAdd] = useState(false);
-  const [modalDelete, setModalDelete] = useState(false);
-  const [modalRename, setModalRename] = useState(false);
+  const activeModal = getActiveModal();
   const showDelete = () => {
-    setModalDelete(true);
-  };
-  const closeDelete = () => {
-    dispatch(channelsActions.changeActionChannelId(null));
-    setModalDelete(false);
-  };
-  const closeRename = () => {
-    dispatch(channelsActions.changeActionChannelId(null));
-    setModalRename(false);
+    dispatch(modalActions.openModal('modalDelete'));
   };
   const showRename = () => {
-    setModalRename(true);
+    dispatch(modalActions.openModal('modalRename'));
+  };
+  const showAdd = () => {
+    dispatch(modalActions.openModal('modalAdd'));
   };
   // Modal
 
@@ -67,19 +62,23 @@ const Chat = (props) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       const { messages, channels, currentChannelId } = response.data;
       dispatch(channelsActions.changeCurrentChannel(currentChannelId));
       dispatch(channelsActions.addChannels(channels));
       dispatch(messagesActions.addMessages(messages));
     } catch (e) {
+      if (e.response.status === 401) {
+        console.log('Token is gone!');
+        toast(t('oldToken'));
+        return;
+      }
       console.log(e);
       toast(t('networkError'));
     }
   };
 
   useEffect(() => {
-    getChatData(Token);
+    getChatData(Token).then();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
@@ -123,7 +122,7 @@ const Chat = (props) => {
     });
 
   useEffect(() => {
-    if (modalDelete || modalAdd || modalRename) {
+    if (activeModal) {
       document.body.classList.add('modal-open');
       document.body.setAttribute('data-rr-ui-modal-open', 'true');
       return;
@@ -131,7 +130,7 @@ const Chat = (props) => {
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalAdd, modalDelete, modalRename]);
+  }, [activeModal]);
   useEffect(() => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   }, [renderedMessages]);
@@ -154,7 +153,7 @@ const Chat = (props) => {
                 <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
                   <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
                     <b>{t('channels')}</b>
-                    <button type="button" className="p-0 text-primary btn btn-group-vertical" onClick={() => setModalAdd(true)}>
+                    <button type="button" className="p-0 text-primary btn btn-group-vertical" onClick={showAdd}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
                         <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -175,7 +174,11 @@ const Chat = (props) => {
                           { channel ? channel.name : 'general'}
                         </b>
                       </p>
-                      <span className="text-muted">{t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannel).length })}</span>
+                      <span className="text-muted">
+                        {
+                        t('count_message', { count: messagesStorage.filter((m) => m.channelId === currentChannel).length })
+}
+                      </span>
                     </div>
                     <div id="messages-box" className="chat-messages overflow-auto px-5 " ref={messagesEndRef}>
                       {renderedMessages}
@@ -185,7 +188,7 @@ const Chat = (props) => {
                         initialValues={{ body: '' }}
                         onSubmit={(values, { resetForm }) => {
                           const name = getUsername();
-                          socket.emit('newMessage', { body: values.body, channelId: currentChannel, username: name });
+                          emitMessage(values.body, currentChannel, name);
                           resetForm({ values: '' });
                         }}
                       >
@@ -214,7 +217,6 @@ const Chat = (props) => {
                           </Form>
                         )}
                       </Formik>
-
                     </div>
                   </div>
                 </div>
@@ -224,29 +226,23 @@ const Chat = (props) => {
           <ToastContainer />
         </div>
       </div>
-      {modalDelete
+      {activeModal === 'modalDelete'
         ? (
           <ModalDelete
-            show={modalDelete}
-            closeHandler={closeDelete}
             idToDelete={actionChannelId}
             socket={socket}
           />
         )
         : null}
-      {modalAdd ? (
+      {activeModal === 'modalAdd' ? (
         <ModalAdd
-          show={modalAdd}
-          handleClose={() => setModalAdd(false)}
           socket={socket}
         />
       ) : null}
-      {modalRename
+      {activeModal === 'modalRename'
         ? (
           <ModalRename
-            show={modalRename}
             id={actionChannelId}
-            handleClose={closeRename}
             socket={socket}
           />
         )

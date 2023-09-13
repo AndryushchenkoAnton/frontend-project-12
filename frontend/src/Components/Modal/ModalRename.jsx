@@ -1,39 +1,37 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import * as yup from 'yup';
 import { getChannels, getChannelById } from '../../selectors';
+import { actions as modalActions } from '../../slices/modalSlice';
+import { useSocket } from "../../hooks";
 
 const ModalRename = (props) => {
-  const [valid, setValid] = useState(true);
-  const [error, setError] = useState(null);
   const { t } = useTranslation();
   const {
-    show, handleClose, socket, id,
+    id,
   } = props;
-  const firstModalDiv = cn('fade', 'modal-backdrop', { show });
-  const secondModalDiv = cn('fade', 'modal', { show });
+  const dispatch = useDispatch();
+  const handleClose = () => {
+    dispatch(modalActions.closeModal());
+  };
+  const { emitRenameChannel } = useSocket();
+  const firstModalDiv = cn('fade', 'modal-backdrop', 'show');
+  const secondModalDiv = cn('fade', 'modal', 'show');
   const channels = getChannels();
   const currentChannel = getChannelById(id);
   const names = channels.map((channel) => channel.name);
-  const toastSuccess = useCallback(() => toast.success(t('channelRenamed'), { autoClose: 5000 }), [t]);
-  const handleSubmit = ({ name }) => {
-    if (names.includes(name)) {
-      setError(t('mustBeUniq'));
-      setValid(false);
-      return;
-    } if (name.length < 3 || name.length > 20) {
-      setError(t('usernameLength'));
-      setValid(false);
-      return;
-    }
-    setError(null);
-    setValid(true);
-    socket.emit('renameChannel', { id, name });
-    handleClose();
-    toastSuccess();
-  };
+  const renameSchema = yup.object().shape({
+    name: yup.string()
+      .required('usernameLength')
+      .min(3, 'usernameLength')
+      .max(20, 'usernameLength')
+      .notOneOf(names, 'mustBeUniq'),
+  });
+
   useEffect(() => {
     document.getElementsByName('name')[0].focus();
   }, []);
@@ -57,20 +55,31 @@ const ModalRename = (props) => {
             <div className="modal-body">
               <Formik
                 initialValues={{ name: currentChannel.name }}
-                onSubmit={handleSubmit}
+                validationSchema={renameSchema}
+                validateOnChange={false}
+                validateOnBlur={false}
+                onSubmit={async ({ name }) => {
+                  try {
+                    emitRenameChannel(name, id);
+                    handleClose();
+                    toast.success(t('channelRenamed'), { autoClose: 5000 });
+                  } catch (e) {
+                    toast(t('networkError'));
+                  }
+                }}
               >
-                {({ values, handleChange }) => (
+                {({ values, handleChange, errors }) => (
                   <Form>
                     <div>
                       <Field
                         name="name"
                         id="name"
-                        className={cn('mb-2', 'form-control', { 'is-invalid': !valid })}
+                        className={cn('mb-2', 'form-control', { 'is-invalid': errors.name })}
                         value={values.name}
                         onChange={handleChange}
                       />
                       <label className="visually-hidden" htmlFor="name">{t('channelName')}</label>
-                      <div className="invalid-feedback">{error}</div>
+                      <div className="invalid-feedback">{errors ? t(errors.name) : null}</div>
                       <div className="d-flex justify-content-end">
                         <button
                           type="button"

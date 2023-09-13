@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import React from 'react';
-import useAuth from '../../hooks';
+import { useAuth } from '../../hooks';
 import paths from '../../paths';
 
 const ChatRoute = ({ children }) => {

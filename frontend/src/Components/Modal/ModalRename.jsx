@@ -58,11 +58,11 @@ const ModalRename = () => {
                 validateOnBlur={false}
                 onSubmit={async ({ name }) => {
                   try {
-                    emitRenameChannel(name, id);
+                    await emitRenameChannel(name, id);
                     handleClose();
                     toast.success(t('channelRenamed'), { autoClose: 5000 });
                   } catch (e) {
-                    toast(t('networkError'));
+                    toast.error(t('networkError'));
                   }
                 }}
               >

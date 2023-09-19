@@ -68,10 +68,10 @@ const SignUp = () => {
                           navigate(paths.defaultPath);
                         } catch (e) {
                           if (e.response.status === 409) {
-                            toast(t('userAlreadyExh'));
+                            toast.error(t('userAlreadyExh'));
                             return;
                           }
-                          toast(t('networkError'));
+                          toast.error(t('networkError'));
                         }
                       }}
                     >

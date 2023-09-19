@@ -73,7 +73,7 @@ const LoginForm = () => {
                             return;
                           }
                           logOut();
-                          toast(t('networkError'));
+                          toast.error(t('networkError'));
                         }
                       }}
                     >

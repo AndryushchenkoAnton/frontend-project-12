@@ -68,12 +68,12 @@ const Chat = () => {
     } catch (e) {
       if (e.response.status === 401) {
         console.log('Token is gone!');
-        toast(t('oldToken'));
+        toast.error(t('oldToken'));
         logOut();
         return;
       }
       console.log(e);
-      toast(t('networkError'));
+      toast.error(t('networkError'));
     }
   };
 
@@ -187,10 +187,15 @@ const Chat = () => {
                     <div className="mt-auto px-5 py-3">
                       <Formik
                         initialValues={{ body: '' }}
-                        onSubmit={(values, { resetForm }) => {
-                          const name = getUsername();
-                          emitMessage(values.body, currentChannel, name);
-                          resetForm({ values: '' });
+                        onSubmit={async (values, { resetForm }) => {
+                          try {
+                            const name = getUsername();
+                            await emitMessage(values.body, currentChannel, name);
+                            resetForm({ values: '' });
+                          } catch (e) {
+                            toast.error(t('networkError'));
+                            console.log(e);
+                          }
                         }}
                       >
                         {({ values, handleChange }) => (

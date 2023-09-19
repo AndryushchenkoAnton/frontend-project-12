@@ -51,11 +51,11 @@ const ModalAdd = () => {
                 validateOnBlur={false}
                 onSubmit={async ({ name }) => {
                   try {
-                    emitNewChannel(name, getUsername());
+                    await emitNewChannel(name, getUsername());
                     handleClose();
                     toast.success(t('channelAdded'), { autoClose: 5000 });
                   } catch (e) {
-                    toast(t('networkError'));
+                    toast.error(t('networkError'));
                   }
                 }}
               >

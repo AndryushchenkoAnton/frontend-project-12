@@ -17,6 +17,7 @@ const SocketProvider = ({ socket, children }) => {
       console.log(response.status);
     });
   };
+
   const emitDeleteChannel = async (id) => {
     await socket.emit('removeChannel', { id }, (response) => {
       console.log(response.status);

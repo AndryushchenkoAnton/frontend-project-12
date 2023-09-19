@@ -15,10 +15,15 @@ const ModalDelete = () => {
   const { t } = useTranslation();
   const { emitDeleteChannel } = useSocket();
   const handleClose = () => dispatch(modalActions.closeModal());
-  const deleteHandler = (id) => () => {
-    emitDeleteChannel(id);
-    toast.success(t('channelDeleted'), { autoClose: 5000 });
-    handleClose();
+  const deleteHandler = (id) => async () => {
+    try {
+      await emitDeleteChannel(id);
+      toast.success(t('channelDeleted'), { autoClose: 5000 });
+      handleClose();
+    } catch (e) {
+      toast.error(t('networkError'));
+      console.log(e);
+    }
   };
 
   return (

@@ -53,7 +53,7 @@ const ModalAdd = () => {
                   try {
                     await emitNewChannel(name, getUsername());
                     handleClose();
-                    toast.success(t('channelAdded'), { autoClose: 5000 });
+                    toast.success(t('channelAdded'), { autoClose: 5000 });// проверил, с 'await' ловит
                   } catch (e) {
                     toast.error(t('networkError'));
                   }

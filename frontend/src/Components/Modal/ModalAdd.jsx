@@ -3,7 +3,7 @@ import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import { useAuth, useSocket } from '../../hooks';
 import { getChannels } from '../../selectors';
@@ -16,7 +16,7 @@ const ModalAdd = () => {
   const { emitNewChannel } = useSocket();
   const firstModalDiv = cn('fade', 'modal-backdrop', 'show');
   const secondModalDiv = cn('fade', 'modal', 'show');
-  const channels = getChannels();
+  const channels = Object.values(useSelector(getChannels()));
   const names = channels.map((channel) => channel.name);
   const handleClose = () => dispatch(modalActions.closeModal());
   const addSchema = yup.object().shape({

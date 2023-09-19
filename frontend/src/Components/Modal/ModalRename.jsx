@@ -3,7 +3,7 @@ import { Field, Form, Formik } from 'formik';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import { getChannels, getChannelById, getModalChId } from '../../selectors';
 import { actions as modalActions } from '../../slices/modalSlice';
@@ -11,7 +11,7 @@ import { useSocket } from '../../hooks';
 
 const ModalRename = () => {
   const { t } = useTranslation();
-  const id = getModalChId();
+  const id = useSelector(getModalChId);
   const dispatch = useDispatch();
   const handleClose = () => {
     dispatch(modalActions.closeModal());
@@ -19,8 +19,8 @@ const ModalRename = () => {
   const { emitRenameChannel } = useSocket();
   const firstModalDiv = cn('fade', 'modal-backdrop', 'show');
   const secondModalDiv = cn('fade', 'modal', 'show');
-  const channels = getChannels();
-  const currentChannel = getChannelById(id);
+  const channels = Object.values(useSelector(getChannels()));
+  const currentChannel = useSelector(getChannelById(id));
   const names = channels.map((channel) => channel.name);
   const renameSchema = yup.object().shape({
     name: yup.string()

@@ -2,13 +2,13 @@ import React from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions as modalActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
 import { getModalChId } from '../../selectors';
 
 const ModalDelete = () => {
-  const idToDelete = getModalChId();
+  const idToDelete = useSelector(getModalChId);
   const dispatch = useDispatch();
   const fadeClass = cn('fade', 'modal-backdrop', 'show');
   const dialogClass = cn('fade', 'modal', 'show');

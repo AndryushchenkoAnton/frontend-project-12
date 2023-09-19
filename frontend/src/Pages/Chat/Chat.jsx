@@ -1,7 +1,7 @@
 import React, {
   useEffect, useRef,
 } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -29,11 +29,11 @@ const Chat = () => {
   } = useAuth();
   const { emitMessage } = useSocket();
   const { t } = useTranslation();
-  const messagesStorage = getMessages();
+  const messagesStorage = Object.values(useSelector(getMessages()));
   const messagesEndRef = useRef(null);
-  const actionChannelId = getModalChId();
+  const actionChannelId = useSelector(getModalChId);
   // Modal
-  const activeModal = getActiveModal();
+  const activeModal = useSelector(getActiveModal);
   const showDelete = () => {
     dispatch(modalActions.openModal('modalDelete'));
   };
@@ -46,8 +46,8 @@ const Chat = () => {
   // Modal
 
   const Token = getToken();
-  const channelsStorage = getChannels();
-  const currentChannel = getCurrentChannel();
+  const channelsStorage = Object.values(useSelector(getChannels()));
+  const currentChannel = useSelector(getCurrentChannel);
 
   const changeChannelHandler = (id) => () => {
     const newCurrentChannel = channelsStorage.find((channel) => channel.id === id);
@@ -69,6 +69,7 @@ const Chat = () => {
       if (e.response.status === 401) {
         console.log('Token is gone!');
         toast(t('oldToken'));
+        logOut();
         return;
       }
       console.log(e);
@@ -126,6 +127,7 @@ const Chat = () => {
       document.body.setAttribute('data-rr-ui-modal-open', 'true');
       return;
     }
+    console.log(channelsStorage);
     document.body.removeAttribute('data-rr-ui-modal-open');
     document.body.classList.remove('modal-open');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -134,7 +136,7 @@ const Chat = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   }, [renderedMessages]);
 
-  const channel = getChannelById(currentChannel);
+  const channel = useSelector(getChannelById(currentChannel));
 
   return (
     <>

@@ -7,7 +7,9 @@ const getChannels = () => channelsSelectors.selectEntities;
 const getCurrentChannel = (state) => state.channels.currentChannel;
 const getModalChId = (state) => state.channels.actionChannelId;
 const getActiveModal = (state) => state.modal.activeModal;
+const getCurrentLang = (state) => state.modal.lang;
 
 export {
   getChannels, getChannelById, getMessages, getCurrentChannel, getModalChId, getActiveModal,
+  getCurrentLang,
 };

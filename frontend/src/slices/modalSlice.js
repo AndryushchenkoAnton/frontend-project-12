@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const modalSlice = createSlice({
   name: 'modalSlice',
-  initialState: { activeModal: undefined },
+  initialState: { activeModal: undefined, lang: 'ru' },
   reducers: {
     openModal(state, { payload }) {
       console.log(payload);
@@ -12,6 +12,10 @@ const modalSlice = createSlice({
     closeModal(state) {
       // eslint-disable-next-line no-param-reassign
       state.activeModal = undefined;
+    },
+    changeLang(state, { payload }) {
+      // eslint-disable-next-line no-param-reassign
+      state.lang = payload;
     },
   },
 });

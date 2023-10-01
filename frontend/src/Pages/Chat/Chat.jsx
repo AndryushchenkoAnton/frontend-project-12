@@ -21,6 +21,7 @@ import {
   getChannelById, getChannels, getMessages, getCurrentChannel, getModalChId, getActiveModal,
 } from '../../selectors';
 import paths from '../../paths';
+import LocaleDropDown from '../../Components/Dropdown/LocaleDropDown';
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -146,6 +147,7 @@ const Chat = () => {
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
                 <a className="navbar-brand" href={paths.defaultPath}>{t('hexletLogo')}</a>
+                <LocaleDropDown />
                 {logStatus ? <button type="button" className="btn btn-primary" onClick={() => logOut()}>{t('logOut')}</button> : null}
               </div>
             </nav>

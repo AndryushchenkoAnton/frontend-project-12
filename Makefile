@@ -6,3 +6,4 @@ start-frontend:
 
 start-backend:
 	npx start-server
+

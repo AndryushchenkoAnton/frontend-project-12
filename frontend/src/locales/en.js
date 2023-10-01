@@ -29,7 +29,7 @@ export default {
     deleteConfirmation: 'Are you sure?',
     deleteAction: 'Delete',
     renameChannel: 'Rename channel',
-    renameAction: 'REname',
+    renameAction: 'Rename',
     channelAdded: 'Channel created',
     channelDeleted: 'Channel deleted',
     channelRenamed: 'Channel renamed',

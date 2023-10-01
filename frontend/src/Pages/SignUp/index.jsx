@@ -9,6 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useAuth } from '../../hooks';
 import signUpImg from '../../images/signUp.jpg';
 import paths from '../../paths';
+import LocaleDropDown from "../../Components/Dropdown/LocaleDropDown";
 
 const signUpSchema = yup.object().shape({
   username: yup.string()
@@ -38,6 +39,7 @@ const SignUp = () => {
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
               <a className="navbar-brand" href={paths.defaultPath}>{t('hexletLogo')}</a>
+              <LocaleDropDown/>
               {logStatus ? <button type="button" className="btn btn-primary" onClick={() => logOut()}>{t('logOut')}</button> : null}
             </div>
           </nav>

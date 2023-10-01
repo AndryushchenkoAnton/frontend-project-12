@@ -61,11 +61,11 @@ const App = () => {
     },
     {
       path: paths.logInPath,
-      element: <LoginForm />,
+      element: <Provider store={store}><LoginForm /></Provider>,
     },
     {
       path: paths.signUpPath,
-      element: <SignUp />,
+      element: <Provider store={store}><SignUp /></Provider>,
     },
   ]);
   return (

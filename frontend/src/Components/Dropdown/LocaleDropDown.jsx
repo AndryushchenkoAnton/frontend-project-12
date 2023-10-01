@@ -15,6 +15,7 @@ const LocaleDropDown = () => {
   };
   const dispatch = useDispatch();
   return (
+      <div>
     <Form>
       <Dropdown
         onSelect={(eventKey) => {
@@ -38,6 +39,7 @@ const LocaleDropDown = () => {
         </Dropdown.Menu>
       </Dropdown>
     </Form>
+      </div>
   );
 };
 

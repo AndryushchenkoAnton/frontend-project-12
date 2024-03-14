@@ -147,8 +147,8 @@ const Chat = () => {
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
                 <a className="navbar-brand" href={paths.defaultPath}>{t('hexletLogo')}</a>
-                  <LocaleDropDown />
-                  {logStatus ? <button type="button" className="btn btn-primary" onClick={() => logOut()}>{t('logOut')}</button> : null}
+                <LocaleDropDown />
+                {logStatus ? <button type="button" className="btn btn-primary" onClick={() => logOut()}>{t('logOut')}</button> : null}
               </div>
             </nav>
             <div className="container h-100 my-4 overflow-hidden rounded shadow">

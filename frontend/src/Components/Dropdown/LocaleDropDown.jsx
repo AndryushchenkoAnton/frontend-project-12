@@ -15,31 +15,31 @@ const LocaleDropDown = () => {
   };
   const dispatch = useDispatch();
   return (
-      <div>
-    <Form>
-      <Dropdown
-        onSelect={(eventKey) => {
-          console.log(eventKey);
-          i18n.changeLanguage(eventKey).then(() => dispatch(modalActions.changeLang(eventKey)))
-            .catch((e) => console.log(e));
-        }}
-      >
-        <Dropdown.Toggle
-          variant="rimary"
-          id="dropdown-flags"
-          className="text-left"
-          style={{ width: 150 }}
+    <div>
+      <Form>
+        <Dropdown
+          onSelect={(eventKey) => {
+            console.log(eventKey);
+            i18n.changeLanguage(eventKey).then(() => dispatch(modalActions.changeLang(eventKey)))
+              .catch((e) => console.log(e));
+          }}
         >
-          {langList[language]}
-        </Dropdown.Toggle>
+          <Dropdown.Toggle
+            variant="rimary"
+            id="dropdown-flags"
+            className="text-left"
+            style={{ width: 150 }}
+          >
+            {langList[language]}
+          </Dropdown.Toggle>
 
-        <Dropdown.Menu>
-          <Dropdown.Item eventKey="ru">{langList.ru}</Dropdown.Item>
-          <Dropdown.Item eventKey="en">{langList.en}</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </Form>
-      </div>
+          <Dropdown.Menu>
+            <Dropdown.Item eventKey="ru">{langList.ru}</Dropdown.Item>
+            <Dropdown.Item eventKey="en">{langList.en}</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </Form>
+    </div>
   );
 };
 

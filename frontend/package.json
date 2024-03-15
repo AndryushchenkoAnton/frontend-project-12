@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "proxy": "http://localhost:5001",
-  "workspaces": ["my-app"],
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@rollbar/react": "^0.11.2",

@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import localeInit from './init.jsx';
+import React from "react";
 
 const app = async () => {
   const root = ReactDOM.createRoot(document.getElementById('root'));
